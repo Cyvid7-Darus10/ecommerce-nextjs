@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PhoneIcon from "@mui/icons-material/Phone";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Layout({ title, children }) {
+  const [openSidebar, setOpenSidebar] = useState(false);
+
   return (
     <>
       <style jsx>
@@ -28,6 +36,28 @@ export default function Layout({ title, children }) {
             font-weight: 500;
             margin-bottom: 15px;
           }
+
+          .bg-image {
+            background-image: linear-gradient(
+                rgba(4, 9, 30, 0.7),
+                rgba(4, 9, 30, 0.7)
+              ),
+              url(/images/indexbg-min.jpg);
+            min-height: 100vh;
+            width: 100%;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+          }
+
+          .center-div {
+            width: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+          }
         `}
       </style>
       <Head>
@@ -37,23 +67,114 @@ export default function Layout({ title, children }) {
       </Head>
       <div className='flex min-h-screen flex-col justify-between'>
         <header>
-          <nav className='flex h-12 items-center px-4 justify-between shadow-md'>
-            <Link href='/' className='p-2'>
-              Cabsfour SSS
-            </Link>
+          <nav className='flex lg:h-12 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white'>
             <div>
-              <Link href='/cart' className='p-2'>
-                Cart
-              </Link>
-              <Link href='/login' className='p-2'>
-                Login
-              </Link>
+              <LocationOnIcon />
+              #067 Overland Subd Bagac, 2107 Bataan
+            </div>
+            <div className='lg:flex'>
+              <p className='mr-0 xl:mr-10'>
+                <PhoneIcon />
+                (+63) 975-491-8698 | (+63) 920-584-3000
+              </p>
+              <p>
+                <MailIcon />
+                Email: cabsfourss@gmail.com
+              </p>
+            </div>
+          </nav>
+          <nav className='lg:px-10 lg:py-5 shadow-md bg-image text-white'>
+            <div className='flex justify-between items-center px-8 lg:px-16'>
+              <Image
+                src='/images/cabsfour_logo.png'
+                alt='logo'
+                width={150}
+                height={150}
+              />
+              <div className='text-sm hidden lg:block'>
+                <Link href='/cart' className='p-2'>
+                  About Us
+                </Link>
+                <Link href='/login' className='p-2'>
+                  Services
+                </Link>
+                <Link href='/login' className='p-2'>
+                  Projects
+                </Link>
+                <Link href='/login' className='p-2'>
+                  Products
+                </Link>
+                <Link href='/login' className='p-2'>
+                  Contact Us
+                </Link>
+                <Link href='/login' className='p-2'>
+                  Account
+                </Link>
+              </div>
+              <div className='lg:hidden'>
+                <button
+                  className='p-2'
+                  onClick={() => {
+                    setOpenSidebar(true);
+                  }}
+                >
+                  <MenuIcon />
+                </button>
+              </div>
+              <div
+                className={`${
+                  openSidebar ? "block" : "hidden"
+                } fixed bg-[#f44336] text-white z-50 right-0 top-0 h-full w-1/2 lg:w-1/4 shadow-md transition-all duration-500`}
+              >
+                <button
+                  className='absolute top-0 left-0 p-2'
+                  onClick={() => {
+                    setOpenSidebar(false);
+                  }}
+                >
+                  <CloseIcon />
+                </button>
+
+                <div className='flex flex-col mt-24'>
+                  <Link href='/cart' className='p-2'>
+                    About Us
+                  </Link>
+                  <Link href='/login' className='p-2'>
+                    Services
+                  </Link>
+                  <Link href='/login' className='p-2'>
+                    Projects
+                  </Link>
+                  <Link href='/login' className='p-2'>
+                    Products
+                  </Link>
+                  <Link href='/login' className='p-2'>
+                    Contact Us
+                  </Link>
+                  <Link href='/login' className='p-2'>
+                    Account
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className='center-div'>
+              <h1 className='text-6xl font-bold mb-16'>Why Choose Us?</h1>
+              <p className=''>
+                We ensure that we provide our clients the best security and
+                protection that we can give. <br />
+                Our workers are highly trained and our equipment are guaranteed
+                top-notch. All of these <br />
+                are maintained well to perform at their best. Because at
+                Cabsfour Security Systems <br />
+                Services, We care for your safety
+              </p>
             </div>
           </nav>
         </header>
         <main className='container m-auto mt-4 px-4'>{children}</main>
-        <footer>
-          <div className='flex flex-wrap justify-between px-20 pt-8 bg-[#111111] text-white'>
+        <footer className='shadow-md'>
+          <div className='flex flex-wrap justify-between px-20 pt-8 bg-[#111111] text-white shadow-inner'>
             <div className='w-full lg:w-1/3'>
               <div className='custom-text-title'>About Us</div>
               <p className='text-[#999999]'>
@@ -70,38 +191,58 @@ export default function Layout({ title, children }) {
               <span className='custom-text-title'>Quick Links</span>
               <ul className='text-[#999999]'>
                 <li>
-                  <a href='about.html'>About Us</a>
+                  <a href='about.html' className='hover:text-[#fff]'>
+                    About Us
+                  </a>
                 </li>
                 <li>
-                  <a href='Services.html'>Services</a>
+                  <a href='Services.html' className='hover:text-[#fff]'>
+                    Services
+                  </a>
                 </li>
                 <li>
-                  <a href='Projects.html'>Projects</a>
+                  <a href='Projects.html' className='hover:text-[#fff]'>
+                    Projects
+                  </a>
                 </li>
                 <li>
-                  <a href='Products.html'>Products</a>
+                  <a href='Products.html' className='hover:text-[#fff]'>
+                    Products
+                  </a>
                 </li>
                 <li>
-                  <a href='Contact Us.html'>Contact Us</a>
+                  <a href='Contact Us.html' className='hover:text-[#fff]'>
+                    Contact Us
+                  </a>
                 </li>
                 <li>
-                  <a href='Account.html'>Account</a>
+                  <a href='Account.html' className='hover:text-[#fff]'>
+                    Account
+                  </a>
                 </li>
               </ul>
             </div>
             <div className='w-full lg:w-1/3 my-5 lg:mt-0'>
               <span className='custom-text-title'>Contact Info</span>
               <ul className='text-[#999999]'>
-                <li>
-                  <i className='fas fa-map-marker-alt'></i> #067 Overland Subd
-                  Bagac, 2107 Bataan, Philippines
+                <li className='flex p-2'>
+                  <LocationOnIcon className='text-white mr-2' />
+                  <p>#067 Overland Subd Bagac, 2107 Bataan, Philippines</p>
                 </li>
-                <li>
-                  <i className='fas fa-phone'></i> +63 9754918698
+                <li className='flex p-2'>
+                  <PhoneIcon className='text-white mr-2' />
+                  <a href='' className='hover:text-[#fff]'>
+                    +63 9754918698
+                  </a>
                 </li>
-                <li>
-                  <i className='fas fa-envelope'></i>
-                  <a href='mailto:cabantacet@gmail.com'>cabantacet@gmail.com</a>
+                <li className='flex p-2'>
+                  <MailIcon className='text-white mr-2' />
+                  <a
+                    href='mailto:cabantacet@gmail.com'
+                    className='hover:text-[#fff]'
+                  >
+                    cabantacet@gmail.com
+                  </a>
                 </li>
               </ul>
             </div>
@@ -110,7 +251,7 @@ export default function Layout({ title, children }) {
             Copyright 2022. All Rights Reserved{" "}
           </div>
         </footer>
-      </div>
+      </div>{" "}
     </>
   );
 }
