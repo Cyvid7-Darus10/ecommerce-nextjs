@@ -131,8 +131,10 @@ export default function Home() {
             }}
           >
             <div className='py-10 custom-div-design text-center text-white flex flex-col justify-center items-center'>
-              <p className='text-6xl font-semibold'>Inspiring Technology</p>
-              <p className='text-xl py-6'>
+              <p className='text-4xl lg:text-6xl font-semibold mt-3'>
+                Inspiring Technology
+              </p>
+              <p className='lg:text-xl px-10 py-6'>
                 We are a hands-on company that provides solutions for our
                 clients&#39;
                 <br /> problems and anticipates future problems before they
