@@ -1,25 +1,46 @@
-import React from "react";
-import Layout from "../../components/Layout";
-import { useRouter } from "next/router";
-import data from "../../utils/data";
+import React, { useContext, useState, useEffect } from "react";
 
+import { useRouter } from "next/router";
+import Link from "next/link";
 import Image from "next/image";
 
+// Utilities
+import data from "../../utils/data";
+import { Store } from "../../utils/Store";
+
+// Components
+import Layout from "../../components/Layout";
+
+// Icons
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-import Link from "next/link";
-
 export default function ProductScreen() {
+  const { state, dispatch } = useContext(Store);
   const { query } = useRouter();
   const { slug } = query;
   const product = data.products.find((x) => x.slug === slug);
+  const [randomProducts, setRandomProducts] = useState([]);
+
+  useEffect(() => {
+    const randommizedProducts = data.products.sort(() => Math.random() - 0.5);
+    const randomFourProducts = randommizedProducts.slice(0, 4);
+    setRandomProducts(randomFourProducts);
+  }, []);
+
   if (!product) {
     return <div>Product Not Found</div>;
   }
 
-  const randomProducts = data.products.sort(() => Math.random() - 0.5);
-  const randomFourProducts = randomProducts.slice(0, 4);
+  const addToCartHandler = () => {
+    const existItem = state.cart.cartItems.find((x) => x.slug === slug);
+
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    dispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...product, quantity: quantity },
+    });
+  };
 
   return (
     <>
@@ -56,7 +77,10 @@ export default function ProductScreen() {
                 <p className='text-lg py-2'>{product.description}</p>
               </div>
 
-              <button className='bg-[#f44336] text-white px-5 py-2 rounded-md mt-auto'>
+              <button
+                className='bg-[#f44336] text-white px-5 py-2 rounded-md mt-auto'
+                onClick={addToCartHandler}
+              >
                 <AddShoppingCartIcon className='text-white text-2xl' />
                 Add to Cart
               </button>
@@ -65,7 +89,7 @@ export default function ProductScreen() {
 
           <p className='text-xl font-semibold px-5 py-5'>Similar Items</p>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pb-12 px-5'>
-            {randomFourProducts.map((product) => (
+            {randomProducts.map((product) => (
               <div
                 className='flex flex-col items-center py-10 px-5 border border-gray-200 rounded-md shadow-md'
                 key={product.id}
