@@ -1,6 +1,5 @@
 import Layout from "../components/Layout";
 import Image from "next/image";
-import Link from "next/link";
 import { TransitionScroll } from "react-transition-scroll";
 import "react-transition-scroll/dist/index.css";
 
@@ -58,8 +57,8 @@ export default function Home() {
             }}
           >
             <div className='py-10 custom-div-design text-center text-white flex flex-col justify-center items-center'>
-              <p className='text-6xl font-semibold'>Our Goals</p>
-              <p className='text-xl py-6'>
+              <p className='text-4xl lg:text-6xl font-semibold'>Our Goals</p>
+              <p className='lg:text-xl px-10 py-6'>
                 Our goal is to bring the security system technology utilized{" "}
                 <br /> by establishments with high level of security
                 equipment&#39;s to <br /> common Filipino Home Business and top
