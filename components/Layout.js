@@ -267,7 +267,7 @@ export default function Layout({ title, children, bgImage }) {
         <div
           className={`${
             openCart ? "opacity-95" : "opacity-10  translate-x-full"
-          } fixed bg-white z-50 right-0 top-0 h-full w-1/2 lg:w-1/4 shadow-md transition-all duration-500 overflow-x-scroll`}
+          } fixed bg-white z-50 right-0 top-0 h-full w-3/4 lg:w-1/4 shadow-md transition-all duration-500 overflow-x-scroll`}
         >
           <button
             className='absolute top-0 left-0 p-2'
@@ -340,7 +340,7 @@ export default function Layout({ title, children, bgImage }) {
         <main className='container m-auto mt-4'>{children}</main>
 
         <footer className='shadow-md'>
-          <div className='flex flex-wrap justify-between px-20 pt-8 bg-[#111111] text-white shadow-inner'>
+          <div className='flex flex-wrap justify-between px-10 lg:px-20 pt-8 bg-[#111111] text-white shadow-inner'>
             <div className='w-full lg:w-1/3'>
               <div className='custom-text-title'>About</div>
               <p className='text-[#999999]'>
