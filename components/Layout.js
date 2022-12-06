@@ -58,7 +58,11 @@ export default function Layout({ title, children, bgImage }) {
                 rgba(4, 9, 30, 0.7)
               ),
               url(${bgImage});
-            min-height: ${title === "Home" ? "100vh" : "50vh"};
+            min-height: ${title === "Home"
+              ? "100vh"
+              : title !== "Product"
+              ? "50vh"
+              : "0"};
             width: 100%;
             background-position: center;
             background-size: cover;
@@ -101,7 +105,11 @@ export default function Layout({ title, children, bgImage }) {
             </nav>
           )}
           <TransitionScroll>
-            <nav className='lg:px-10 lg:py-5 shadow-md bg-image text-white'>
+            <nav
+              className={`lg:px-10 ${
+                title === "Product" ? "py-0" : "lg:py-5"
+              } shadow-md bg-image text-white`}
+            >
               <div className='flex justify-between items-center px-8 lg:px-16'>
                 <Image
                   src='/images/cabsfour_logo.png'
@@ -159,7 +167,7 @@ export default function Layout({ title, children, bgImage }) {
                   </p>
                 </div>
               )}
-              {title !== "Home" && (
+              {title !== "Home" && title !== "Product" && (
                 <div className='center-div'>
                   <h1 className='text-4xl font-bold mb-16'>{title}</h1>
                 </div>
