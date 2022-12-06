@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
@@ -16,11 +16,28 @@ import CloseIcon from "@mui/icons-material/Close";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import MapIcon from "@mui/icons-material/Map";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import DeleteOutline from "@mui/icons-material/DeleteOutline";
+
+// Utilities
+import { Store } from "../utils/Store";
 
 export default function Layout({ title, children, bgImage }) {
+  const { state, dispatch } = useContext(Store);
+  const { cart } = state;
   const [openSidebar, setOpenSidebar] = useState(false);
   const { height, width } = useWindowDimensions();
   const [isPortrait, setIsPortrait] = useState(height > width);
+  const [openCart, setOpenCart] = useState(false);
+
+  const removeFromCartHandler = (product) => {
+    const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
+    const quantity = existItem ? existItem.quantity - 1 : 1;
+    dispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...product, quantity: quantity },
+    });
+  };
 
   useEffect(() => {
     setIsPortrait(height > width);
@@ -86,6 +103,7 @@ export default function Layout({ title, children, bgImage }) {
       </Head>
       <div className='flex min-h-screen flex-col justify-between'>
         <header>
+          {/* Banner */}
           {title === "Home" && !isPortrait && (
             <nav className='flex lg:h-12 h-10 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white'>
               <div className='flex items-center'>
@@ -104,12 +122,15 @@ export default function Layout({ title, children, bgImage }) {
               </div>
             </nav>
           )}
+
+          {/* Navbar */}
           <TransitionScroll>
             <nav
               className={`lg:px-10 ${
                 title === "Product" ? "py-0" : "lg:py-5"
               } shadow-md bg-image text-white`}
             >
+              {/* Navbar */}
               <div className='flex justify-between items-center px-8 lg:px-16'>
                 <Image
                   src='/images/cabsfour_logo.png'
@@ -117,6 +138,8 @@ export default function Layout({ title, children, bgImage }) {
                   width={150}
                   height={150}
                 />
+
+                {/* Menus */}
                 <div className='text-sm hidden lg:flex flex-row'>
                   {title !== "Home" && (
                     <Link href='/' className='p-2 custom-hover'>
@@ -141,6 +164,19 @@ export default function Layout({ title, children, bgImage }) {
                   <Link href='/account' className='p-2 custom-hover'>
                     Account
                   </Link>
+                  <button
+                    className='p-2 custom-hover'
+                    onClick={() => {
+                      setOpenCart(true);
+                    }}
+                  >
+                    <ShoppingCartIcon />
+                    {cart.cartItems.length > 0 && (
+                      <span className='ml-1 rounded-full bg-[#f44336] text-white px-2 py-1 text-xs font-bold'>
+                        {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                      </span>
+                    )}
+                  </button>
                 </div>
                 <div className='lg:hidden'>
                   <button
@@ -153,6 +189,7 @@ export default function Layout({ title, children, bgImage }) {
                   </button>
                 </div>
               </div>
+
               {title === "Home" && (
                 <div className='center-div'>
                   <h1 className='text-6xl font-bold mb-16'>Why Choose Us?</h1>
@@ -175,6 +212,8 @@ export default function Layout({ title, children, bgImage }) {
             </nav>
           </TransitionScroll>
         </header>
+
+        {/* Sidebar */}
         <div
           className={`${
             openSidebar ? "opacity-95" : "opacity-10  translate-x-full"
@@ -215,6 +254,80 @@ export default function Layout({ title, children, bgImage }) {
             </Link>
           </div>
         </div>
+
+        {/* Side Cart */}
+        <div
+          className={`${
+            openCart ? "opacity-95" : "opacity-10  translate-x-full"
+          } fixed bg-white z-50 right-0 top-0 h-full w-1/2 lg:w-1/4 shadow-md transition-all duration-500 overflow-x-scroll`}
+        >
+          <button
+            className='absolute top-0 left-0 p-2'
+            onClick={() => {
+              setOpenCart(false);
+            }}
+          >
+            <CloseIcon />
+          </button>
+          <div className='text-center mt-10 mb-4 text-2xl font-bold'>
+            Your Cart
+          </div>
+          <div className='flex flex-row justify-between items-center p-4 border border-y-[#f44336]'>
+            <p className='font-semibold'>Total:</p>
+            <p className='font-semibold'>
+              {cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0)} PHP
+            </p>
+            <div>
+              <Link href='/cart'>
+                <button className='bg-[#f44336] text-white px-4 py-2 rounded-md'>
+                  View Cart
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          {cart.cartItems.length === 0 && (
+            <div className='text-center'>Cart is empty</div>
+          )}
+          {cart.cartItems.length > 0 && (
+            <div className='flex flex-col'>
+              {cart.cartItems.map((item) => (
+                <div
+                  key={item.id}
+                  className='flex flex-row justify-between items-center p-4 border border-b-[#f44336]'
+                >
+                  <div className='flex flex-row items-center'>
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={50}
+                      height={50}
+                    />
+                    <div className='ml-4'>
+                      <div>{item.name}</div>
+                      <div className='text-[#999999]'>
+                        {item.quantity} x ₱{item.price}
+                        <span className='text-[#f44336]'>
+                          {" "}
+                          = ₱{item.quantity * item.price}
+                        </span>
+                        <button
+                          className='ml-2'
+                          onClick={() => {
+                            removeFromCartHandler(item);
+                          }}
+                        >
+                          <DeleteOutline />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         <main className='container m-auto mt-4'>{children}</main>
 
         <footer className='shadow-md'>
