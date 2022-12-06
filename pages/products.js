@@ -1,16 +1,21 @@
-import { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import Layout from "../components/Layout";
 import Pagination from "../components/Pagination";
 
 import Image from "next/image";
-import data from "../utils/data";
+
 import SearchIcon from "@mui/icons-material/Search";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+
+// Utilities
+import data from "../utils/data";
+import { Store } from "../utils/Store";
 
 import Link from "next/link";
 
 export default function Home() {
+  const { state, dispatch } = useContext(Store);
   const [items, setItems] = useState(data.products);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +28,16 @@ export default function Home() {
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const addToCartHandler = (product) => {
+    const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
+
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    dispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...product, quantity: quantity },
+    });
+  };
 
   return (
     <>
@@ -73,7 +88,10 @@ export default function Home() {
                   <p className='py-5 text-[#f44336] mt-auto'>
                     ₱ {product.price}
                   </p>
-                  <button className='bg-[#f44336] text-white px-5 py-2 rounded-md mt-auto'>
+                  <button
+                    className='bg-[#f44336] text-white px-5 py-2 rounded-md mt-auto'
+                    onClick={() => addToCartHandler(product)}
+                  >
                     <AddShoppingCartIcon className='text-white text-2xl' />
                   </button>
                 </div>
