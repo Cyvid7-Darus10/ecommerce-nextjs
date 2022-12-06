@@ -110,9 +110,6 @@ export default function ProductScreen() {
                   {product.name}
                 </p>
                 <p className='py-5 text-[#f44336] mt-auto'>₱ {product.price}</p>
-                <button className='bg-[#f44336] text-white px-5 py-2 rounded-md mt-auto'>
-                  <AddShoppingCartIcon className='text-white text-2xl' />
-                </button>
               </div>
             ))}
           </div>

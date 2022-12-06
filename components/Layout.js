@@ -43,6 +43,14 @@ export default function Layout({ title, children, bgImage }) {
     setIsPortrait(height > width);
   }, [height, width]);
 
+  useEffect(() => {
+    if (
+      (title === "Product" || title === "Products") &&
+      cart.cartItems.length > 0
+    )
+      setOpenCart(true);
+  }, [cart, title]);
+
   return (
     <>
       <style jsx>
@@ -305,11 +313,12 @@ export default function Layout({ title, children, bgImage }) {
                     />
                     <div className='ml-4'>
                       <div>{item.name}</div>
-                      <div className='text-[#999999]'>
-                        {item.quantity} x ₱{item.price}
-                        <span className='text-[#f44336]'>
-                          {" "}
-                          = ₱{item.quantity * item.price}
+                      <div className='text-[#999999]  flex flex-row justify-between'>
+                        <span>
+                          {item.quantity} x ₱{item.price} ={" "}
+                          <span className='text-[#f44336]'>
+                            ₱{item.quantity * item.price}
+                          </span>
                         </span>
                         <button
                           className='ml-2'
