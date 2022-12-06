@@ -88,6 +88,7 @@ const data = {
       information:
         "With the increasing demand on CCTV surveillance system, Safetyzone offers wide range of surveillance cameras and recorders that will fit your security requirements and budget.",
       image: "/images/service/services1.png",
+      hoverImage: "/images/service/services_bg1.png",
     },
     {
       id: 2,
@@ -96,6 +97,7 @@ const data = {
       information:
         "Fire alarm is designed to detect the unwanted presence of fire by monitoring environmental changes associated It can be automatically actuated, manually actuated or both automatic.",
       image: "/images/service/services2.png",
+      hoverImage: "/images/service/services_bg2.png",
     },
     {
       id: 3,
@@ -104,6 +106,7 @@ const data = {
       information:
         "point-of-sale that uses biometric authentication based on physical characteristics to identify the user and authorize the deduction of funds from a bank account.",
       image: "/images/service/services3.png",
+      hoverImage: "/images/service/services_bg3.png",
     },
     {
       id: 4,
@@ -112,6 +115,7 @@ const data = {
       information:
         " Structured cabling is an infrastructure that’s made up of smaller, standardized elements. You can install structured cabling systems in a building or across a campus.",
       image: "/images/service/services4.png",
+      hoverImage: "/images/service/services_bg4.png",
     },
     {
       id: 5,
@@ -120,6 +124,7 @@ const data = {
       information:
         "A measurable physical characteristic or personal behavioral trait used to recognize the identity, or verify the claimed identity, of an applicant. Facial images, fingerprints, and iris scan.",
       image: "/images/service/services5.png",
+      hoverImage: "/images/service/services_bg5.png",
     },
     {
       id: 6,
@@ -128,6 +133,7 @@ const data = {
       information:
         "Computer repair is a broad field encompassing many tools, techniques and procedures used to repair computer hardware, software or network/Internet problems.",
       image: "/images/service/services6.png",
+      hoverImage: "/images/service/services_bg6.png",
     },
     {
       id: 7,
@@ -136,6 +142,7 @@ const data = {
       information:
         "Its purpose is to limit access to people who are authorized to enter an organization. It uses door readers that detect the unique identification numbers provided by credentials.",
       image: "/images/service/services7.png",
+      hoverImage: "/images/service/services_bg7.png",
     },
     {
       id: 8,
@@ -144,6 +151,7 @@ const data = {
       information:
         "made up of an input source like a microphone, amplifiers, speakers and a controller.It allows to communicate from central panel to multiple or single areas.",
       image: "/images/service/services8.png",
+      hoverImage: "/images/service/services_bg8.png",
     },
   ],
 
@@ -183,6 +191,123 @@ const data = {
       name: "Ecosystem Technologies International Warehouse",
       image:
         "/images/logo/Ecosystem Technologies International Warehouse-logo.png",
+    },
+  ],
+
+  projects: [
+    {
+      id: 1,
+      image: "/images/project/projects_row1.jpg",
+    },
+    {
+      id: 2,
+      image: "/images/project/projects_row2.jpg",
+    },
+    {
+      id: 3,
+      image: "/images/project/projects_row3.jpg",
+    },
+    {
+      id: 4,
+      image: "/images/project/projects_row4.jpg",
+    },
+    {
+      id: 5,
+      image: "/images/project/projects_row5.jpg",
+    },
+    {
+      id: 6,
+      image: "/images/project/projects_row6.jpg",
+    },
+    {
+      id: 7,
+      image: "/images/project/projects_row7.jpg",
+    },
+    {
+      id: 8,
+      image: "/images/project/projects_row8.jpg",
+    },
+    {
+      id: 9,
+      image: "/images/project/projects_row9.jpg",
+    },
+    {
+      id: 10,
+      image: "/images/project/projects_row10.jpg",
+    },
+  ],
+
+  projects2: [
+    {
+      id: 1,
+      image: "/images/project/projects2_row1.jpg",
+    },
+    {
+      id: 2,
+      image: "/images/project/projects2_row2.jpg",
+    },
+    {
+      id: 3,
+      image: "/images/project/projects2_row3.jpg",
+    },
+    {
+      id: 4,
+      image: "/images/project/projects2_row4.jpg",
+    },
+    {
+      id: 5,
+      image: "/images/project/projects2_row5.jpg",
+    },
+    {
+      id: 6,
+      image: "/images/project/projects2_row6.jpg",
+    },
+    {
+      id: 7,
+      image: "/images/project/projects2_row7.jpg",
+    },
+    {
+      id: 8,
+      image: "/images/project/projects2_row8.jpg",
+    },
+    {
+      id: 9,
+      image: "/images/project/projects2_row9.jpg",
+    },
+    {
+      id: 10,
+      image: "/images/project/projects2_row10.jpg",
+    },
+  ],
+
+  projects3: [
+    {
+      id: 1,
+      image: "/images/project/projects3_row1.jpg",
+    },
+    {
+      id: 2,
+      image: "/images/project/projects3_row2.jpg",
+    },
+    {
+      id: 3,
+      image: "/images/project/projects3_row3.jpg",
+    },
+    {
+      id: 4,
+      image: "/images/project/projects3_row4.jpg",
+    },
+    {
+      id: 5,
+      image: "/images/project/projects3_row5.jpg",
+    },
+    {
+      id: 6,
+      image: "/images/project/projects3_row6.jpg",
+    },
+    {
+      id: 7,
+      image: "/images/project/projects3_row7.jpg",
     },
   ],
 };
