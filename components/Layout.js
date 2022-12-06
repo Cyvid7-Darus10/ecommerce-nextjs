@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
@@ -7,9 +7,18 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { TransitionScroll } from "react-transition-scroll";
+import "react-transition-scroll/dist/index.css";
+import useWindowDimensions from "../utils/useWindowDimensions";
 
-export default function Layout({ title, children }) {
+export default function Layout({ title, children, bgImage }) {
   const [openSidebar, setOpenSidebar] = useState(false);
+  const { height, width } = useWindowDimensions();
+  const [isPortrait, setIsPortrait] = useState(height > width);
+
+  useEffect(() => {
+    setIsPortrait(height > width);
+  }, [height, width]);
 
   return (
     <>
@@ -42,8 +51,8 @@ export default function Layout({ title, children }) {
                 rgba(4, 9, 30, 0.7),
                 rgba(4, 9, 30, 0.7)
               ),
-              url(/images/indexbg-min.jpg);
-            min-height: 100vh;
+              url(${bgImage});
+            min-height: ${title === "Home" ? "100vh" : "50vh"};
             width: 100%;
             background-position: center;
             background-size: cover;
@@ -67,116 +76,137 @@ export default function Layout({ title, children }) {
       </Head>
       <div className='flex min-h-screen flex-col justify-between'>
         <header>
-          <nav className='flex lg:h-12 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white'>
-            <div>
-              <LocationOnIcon />
-              #067 Overland Subd Bagac, 2107 Bataan
-            </div>
-            <div className='lg:flex'>
-              <p className='mr-0 xl:mr-10'>
-                <PhoneIcon />
-                (+63) 975-491-8698 | (+63) 920-584-3000
-              </p>
-              <p>
-                <MailIcon />
-                Email: cabsfourss@gmail.com
-              </p>
-            </div>
-          </nav>
-          <nav className='lg:px-10 lg:py-5 shadow-md bg-image text-white'>
-            <div className='flex justify-between items-center px-8 lg:px-16'>
-              <Image
-                src='/images/cabsfour_logo.png'
-                alt='logo'
-                width={150}
-                height={150}
-              />
-              <div className='text-sm hidden lg:block'>
-                <Link href='/cart' className='p-2'>
-                  About Us
-                </Link>
-                <Link href='/login' className='p-2'>
-                  Services
-                </Link>
-                <Link href='/login' className='p-2'>
-                  Projects
-                </Link>
-                <Link href='/login' className='p-2'>
-                  Products
-                </Link>
-                <Link href='/login' className='p-2'>
-                  Contact Us
-                </Link>
-                <Link href='/login' className='p-2'>
-                  Account
-                </Link>
+          {title === "Home" && !isPortrait && (
+            <nav className='flex lg:h-12 h-10 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white'>
+              <div className='flex items-center'>
+                <LocationOnIcon />
+                #067 Overland Subd Bagac, 2107 Bataan
               </div>
-              <div className='lg:hidden'>
-                <button
-                  className='p-2'
-                  onClick={() => {
-                    setOpenSidebar(true);
-                  }}
-                >
-                  <MenuIcon />
-                </button>
+              <div className='lg:ml-2 m-0 lg:flex'>
+                <p className='mr-0 xl:mr-10 flex items-center'>
+                  <PhoneIcon />
+                  (+63) 975-491-8698 | (+63) 920-584-3000
+                </p>
+                <p className='wrap flex items-center'>
+                  <MailIcon />
+                  Email: cabsfourss@gmail.com
+                </p>
               </div>
-              <div
-                className={`${
-                  openSidebar ? "block" : "hidden"
-                } fixed bg-[#f44336] text-white z-50 right-0 top-0 h-full w-1/2 lg:w-1/4 shadow-md transition-all duration-500`}
-              >
-                <button
-                  className='absolute top-0 left-0 p-2'
-                  onClick={() => {
-                    setOpenSidebar(false);
-                  }}
-                >
-                  <CloseIcon />
-                </button>
-
-                <div className='flex flex-col mt-24'>
-                  <Link href='/cart' className='p-2'>
-                    About Us
+            </nav>
+          )}
+          <TransitionScroll>
+            <nav className='lg:px-10 lg:py-5 shadow-md bg-image text-white'>
+              <div className='flex justify-between items-center px-8 lg:px-16'>
+                <Image
+                  src='/images/cabsfour_logo.png'
+                  alt='logo'
+                  width={150}
+                  height={150}
+                />
+                <div className='text-sm hidden lg:flex flex-row'>
+                  {title !== "Home" && (
+                    <Link href='/' className='p-2 custom-hover'>
+                      Home
+                    </Link>
+                  )}
+                  <Link href='/about' className='p-2 custom-hover'>
+                    About
                   </Link>
-                  <Link href='/login' className='p-2'>
+                  <Link href='/services' className='p-2 custom-hover'>
                     Services
                   </Link>
-                  <Link href='/login' className='p-2'>
+                  <Link href='/projects' className='p-2 custom-hover'>
                     Projects
                   </Link>
-                  <Link href='/login' className='p-2'>
+                  <Link href='/products' className='p-2 custom-hover'>
                     Products
                   </Link>
-                  <Link href='/login' className='p-2'>
+                  <Link href='/contact' className='p-2 custom-hover'>
                     Contact Us
                   </Link>
-                  <Link href='/login' className='p-2'>
+                  <Link href='/account' className='p-2 custom-hover'>
                     Account
                   </Link>
                 </div>
+                <div className='lg:hidden'>
+                  <button
+                    className='p-2'
+                    onClick={() => {
+                      setOpenSidebar(true);
+                    }}
+                  >
+                    <MenuIcon />
+                  </button>
+                </div>
               </div>
-            </div>
-
-            <div className='center-div'>
-              <h1 className='text-6xl font-bold mb-16'>Why Choose Us?</h1>
-              <p className=''>
-                We ensure that we provide our clients the best security and
-                protection that we can give. <br />
-                Our workers are highly trained and our equipment are guaranteed
-                top-notch. All of these <br />
-                are maintained well to perform at their best. Because at
-                Cabsfour Security Systems <br />
-                Services, We care for your safety
-              </p>
-            </div>
-          </nav>
+              {title === "Home" && (
+                <div className='center-div'>
+                  <h1 className='text-6xl font-bold mb-16'>Why Choose Us?</h1>
+                  <p className=''>
+                    We ensure that we provide our clients the best security and
+                    protection that we can give. <br />
+                    Our workers are highly trained and our equipment are
+                    guaranteed top-notch. All of these <br />
+                    are maintained well to perform at their best. Because at
+                    Cabsfour Security Systems <br />
+                    Services, We care for your safety
+                  </p>
+                </div>
+              )}
+              {title !== "Home" && (
+                <div className='center-div'>
+                  <h1 className='text-4xl font-bold mb-16'>{title}</h1>
+                </div>
+              )}
+            </nav>
+          </TransitionScroll>
         </header>
-        <main className='container m-auto mt-4 px-4'>{children}</main>
+        <div
+          className={`${
+            openSidebar ? "opacity-95" : "opacity-10  translate-x-full"
+          } fixed bg-[#f44336] text-white z-50 right-0 top-0 h-full w-1/2 lg:w-1/4 shadow-md transition-all duration-500`}
+        >
+          <button
+            className='absolute top-0 left-0 p-2'
+            onClick={() => {
+              setOpenSidebar(false);
+            }}
+          >
+            <CloseIcon />
+          </button>
+
+          <div className='flex flex-col mt-24'>
+            {title !== "Home" && (
+              <Link href='/' className='p-2 custom-hover'>
+                Home
+              </Link>
+            )}
+            <Link href='/about' className='p-2 custom-hover'>
+              About
+            </Link>
+            <Link href='/services' className='p-2 custom-hover'>
+              Services
+            </Link>
+            <Link href='/projects' className='p-2 custom-hover'>
+              Projects
+            </Link>
+            <Link href='/products' className='p-2 custom-hover'>
+              Products
+            </Link>
+            <Link href='/contact' className='p-2 custom-hover'>
+              Contact Us
+            </Link>
+            <Link href='/account' className='p-2 custom-hover'>
+              Account
+            </Link>
+          </div>
+        </div>
+        <main className='container m-auto mt-4'>{children}</main>
+
         <footer className='shadow-md'>
           <div className='flex flex-wrap justify-between px-20 pt-8 bg-[#111111] text-white shadow-inner'>
             <div className='w-full lg:w-1/3'>
-              <div className='custom-text-title'>About Us</div>
+              <div className='custom-text-title'>About</div>
               <p className='text-[#999999]'>
                 Cabsfour Security Systems Services is a Filipino owned company
                 formed by dedicated entrepreneurs more than two Decades work
@@ -191,34 +221,34 @@ export default function Layout({ title, children }) {
               <span className='custom-text-title'>Quick Links</span>
               <ul className='text-[#999999]'>
                 <li>
-                  <a href='about.html' className='hover:text-[#fff]'>
-                    About Us
-                  </a>
+                  <Link href='/about' className='hover:text-[#fff]'>
+                    About
+                  </Link>
                 </li>
                 <li>
-                  <a href='Services.html' className='hover:text-[#fff]'>
+                  <Link href='/services' className='hover:text-[#fff]'>
                     Services
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='Projects.html' className='hover:text-[#fff]'>
+                  <Link href='/projects' className='hover:text-[#fff]'>
                     Projects
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='Products.html' className='hover:text-[#fff]'>
+                  <Link href='/products' className='hover:text-[#fff]'>
                     Products
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='Contact Us.html' className='hover:text-[#fff]'>
+                  <Link href='/contact' className='hover:text-[#fff]'>
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='Account.html' className='hover:text-[#fff]'>
+                  <Link href='/account' className='hover:text-[#fff]'>
                     Account
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -231,18 +261,18 @@ export default function Layout({ title, children }) {
                 </li>
                 <li className='flex p-2'>
                   <PhoneIcon className='text-white mr-2' />
-                  <a href='' className='hover:text-[#fff]'>
+                  <Link href='' className='hover:text-[#fff]'>
                     +63 9754918698
-                  </a>
+                  </Link>
                 </li>
                 <li className='flex p-2'>
                   <MailIcon className='text-white mr-2' />
-                  <a
+                  <Link
                     href='mailto:cabantacet@gmail.com'
                     className='hover:text-[#fff]'
                   >
                     cabantacet@gmail.com
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
