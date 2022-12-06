@@ -2,14 +2,20 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
+
+import { TransitionScroll } from "react-transition-scroll";
+import "react-transition-scroll/dist/index.css";
+import useWindowDimensions from "../utils/useWindowDimensions";
+
+// Icons
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { TransitionScroll } from "react-transition-scroll";
-import "react-transition-scroll/dist/index.css";
-import useWindowDimensions from "../utils/useWindowDimensions";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import MapIcon from "@mui/icons-material/Map";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 export default function Layout({ title, children, bgImage }) {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -216,6 +222,30 @@ export default function Layout({ title, children, bgImage }) {
                 IPBX, Electric Fence, Structured Cabling, Solar System Public
                 Address System, Electrical, Alarm and CCTV.
               </p>
+
+              <div className='flex mt-5'>
+                <Link
+                  href='https://www.facebook.com/cabsfour/'
+                  target='_blank'
+                  className='mr-5'
+                >
+                  <FacebookIcon />
+                </Link>
+                <Link
+                  href='https://vymaps.com/PH/Cabsfour-Security-System-Services-1213493655491211/'
+                  target='_blank '
+                  className='mr-5'
+                >
+                  <MapIcon />
+                </Link>
+                <Link
+                  href='https://ph-check.com/item/cabsfour-security-systems-services/519037.html'
+                  target='_blank'
+                  className='mr-5'
+                >
+                  <CheckBoxIcon />
+                </Link>
+              </div>
             </div>
             <div className='w-full lg:w-1/5 mt-5 lg:mt-0'>
               <span className='custom-text-title'>Quick Links</span>
@@ -255,17 +285,17 @@ export default function Layout({ title, children, bgImage }) {
             <div className='w-full lg:w-1/3 my-5 lg:mt-0'>
               <span className='custom-text-title'>Contact Info</span>
               <ul className='text-[#999999]'>
-                <li className='flex p-2'>
+                <li className='flex py-2'>
                   <LocationOnIcon className='text-white mr-2' />
                   <p>#067 Overland Subd Bagac, 2107 Bataan, Philippines</p>
                 </li>
-                <li className='flex p-2'>
+                <li className='flex py-2'>
                   <PhoneIcon className='text-white mr-2' />
                   <Link href='' className='hover:text-[#fff]'>
                     +63 9754918698
                   </Link>
                 </li>
-                <li className='flex p-2'>
+                <li className='flex py-2'>
                   <MailIcon className='text-white mr-2' />
                   <Link
                     href='mailto:cabantacet@gmail.com'
