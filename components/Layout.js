@@ -17,27 +17,68 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import MapIcon from "@mui/icons-material/Map";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 // Utilities
 import { Store } from "../utils/Store";
+import { formatNumber } from "../utils/utils";
 
-export default function Layout({ title, children, bgImage }) {
+// Components
+import Modal from "../components/Modal";
+
+export default function Layout({ title, smallHeader, children, bgImage }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
-  const [openSidebar, setOpenSidebar] = useState(false);
-  const { height, width } = useWindowDimensions();
-  const [isPortrait, setIsPortrait] = useState(height > width);
-  const [openCart, setOpenCart] = useState(false);
 
-  const removeFromCartHandler = (product) => {
+  const [openSidebar, setOpenSidebar] = useState(false);
+  const [openCart, setOpenCart] = useState(false);
+  const [modalDetail, setModalDetail] = useState({
+    message: "",
+    status: "",
+    show: false,
+    action: () => {},
+  });
+
+  const cartQuantityActionHandler = (product, action) => {
     const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
-    const quantity = existItem ? existItem.quantity - 1 : 1;
+    let quantity;
+
+    switch (action) {
+      case "add":
+        quantity = existItem ? existItem.quantity + 1 : 1;
+        break;
+      case "remove":
+        quantity = existItem ? existItem.quantity - 1 : 1;
+        break;
+      default:
+        return false;
+    }
+
+    // If quantity is 0, show modal messag for confirmation
+    if (quantity === 0) {
+      setModalDetail({
+        message: "Are you sure you want to remove this item from the cart?",
+        status: "warning",
+        show: true,
+        action: () => {
+          dispatch({
+            type: "CART_UPDATE_ITEM",
+            payload: { ...product, quantity: quantity },
+          });
+        },
+      });
+      return false;
+    }
+
     dispatch({
-      type: "CART_ADD_ITEM",
+      type: "CART_UPDATE_ITEM",
       payload: { ...product, quantity: quantity },
     });
   };
+
+  const { height, width } = useWindowDimensions();
+  const [isPortrait, setIsPortrait] = useState(height > width);
 
   useEffect(() => {
     setIsPortrait(height > width);
@@ -85,9 +126,9 @@ export default function Layout({ title, children, bgImage }) {
               url(${bgImage});
             min-height: ${title === "Home"
               ? "100vh"
-              : title !== "Product"
-              ? "50vh"
-              : "0"};
+              : smallHeader
+              ? 0
+              : "50vh"};
             width: 100%;
             background-position: center;
             background-size: cover;
@@ -113,7 +154,9 @@ export default function Layout({ title, children, bgImage }) {
         <header>
           {/* Banner */}
           {title === "Home" && !isPortrait && (
-            <nav className='flex lg:h-12 h-10 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white'>
+            <nav
+              className={`flex lg:h-10 h-5 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white`}
+            >
               <div className='flex items-center'>
                 <LocationOnIcon />
                 #067 Overland Subd Bagac, 2107 Bataan
@@ -135,7 +178,7 @@ export default function Layout({ title, children, bgImage }) {
           <TransitionScroll>
             <nav
               className={`lg:px-10 ${
-                title === "Product" ? "py-0" : "lg:py-5"
+                smallHeader ? "py-0" : "lg:py-5"
               } shadow-md bg-image text-white`}
             >
               {/* Navbar */}
@@ -143,8 +186,8 @@ export default function Layout({ title, children, bgImage }) {
                 <Image
                   src='/images/cabsfour_logo.png'
                   alt='logo'
-                  width={150}
-                  height={150}
+                  width={smallHeader ? 100 : 150}
+                  height={smallHeader ? 100 : 150}
                 />
 
                 {/* Menus */}
@@ -212,7 +255,7 @@ export default function Layout({ title, children, bgImage }) {
                   </p>
                 </div>
               )}
-              {title !== "Home" && title !== "Product" && (
+              {!smallHeader && (
                 <div className='center-div'>
                   <h1 className='text-4xl font-bold mb-16'>{title}</h1>
                 </div>
@@ -283,7 +326,10 @@ export default function Layout({ title, children, bgImage }) {
           <div className='flex flex-row justify-between items-center p-4 border border-y-[#f44336]'>
             <p className='font-semibold'>Total:</p>
             <p className='font-semibold'>
-              {cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0)} PHP
+              {formatNumber(
+                cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
+              )}{" "}
+              PHP
             </p>
             <div>
               <Link href='/cart'>
@@ -315,19 +361,29 @@ export default function Layout({ title, children, bgImage }) {
                       <div>{item.name}</div>
                       <div className='text-[#999999]  flex flex-row justify-between'>
                         <span>
-                          {item.quantity} x ₱{item.price} ={" "}
+                          {item.quantity} x ₱{formatNumber(item.price)} ={" "}
                           <span className='text-[#f44336]'>
-                            ₱{item.quantity * item.price}
+                            ₱{formatNumber(item.quantity * item.price)}
                           </span>
                         </span>
-                        <button
-                          className='ml-2'
-                          onClick={() => {
-                            removeFromCartHandler(item);
-                          }}
-                        >
-                          <DeleteOutline />
-                        </button>
+                        <div>
+                          <button
+                            className='ml-2'
+                            onClick={() => {
+                              cartQuantityActionHandler(item, "remove");
+                            }}
+                          >
+                            <RemoveIcon />
+                          </button>
+                          <button
+                            className='ml-2 text-[#f44336] hover:transform hover:scale-110'
+                            onClick={() => {
+                              cartQuantityActionHandler(item, "add");
+                            }}
+                          >
+                            <AddIcon />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -340,7 +396,7 @@ export default function Layout({ title, children, bgImage }) {
         <main className='container m-auto mt-4'>{children}</main>
 
         <footer className='shadow-md'>
-          <div className='flex flex-wrap justify-between px-10 lg:px-20 pt-8 bg-[#111111] text-white shadow-inner'>
+          <div className='flex flex-wrap justify-between px-10 lg:px-20 pt-8 bg-[#111111] text-white shadow-inner pb-5'>
             <div className='w-full lg:w-1/3'>
               <div className='custom-text-title'>About</div>
               <p className='text-[#999999]'>
@@ -442,6 +498,7 @@ export default function Layout({ title, children, bgImage }) {
           </div>
         </footer>
       </div>{" "}
+      <Modal modalDetail={modalDetail} setModalDetail={setModalDetail} />
     </>
   );
 }
