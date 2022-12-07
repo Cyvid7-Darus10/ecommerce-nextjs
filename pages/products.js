@@ -11,6 +11,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 // Utilities
 import data from "../utils/data";
 import { Store } from "../utils/Store";
+import { formatNumber } from "../utils/utils";
 
 import Link from "next/link";
 
@@ -34,7 +35,7 @@ export default function Home() {
 
     const quantity = existItem ? existItem.quantity + 1 : 1;
     dispatch({
-      type: "CART_ADD_ITEM",
+      type: "CART_UPDATE_ITEM",
       payload: { ...product, quantity: quantity },
     });
   };
@@ -86,7 +87,7 @@ export default function Home() {
                     {product.name}
                   </p>
                   <p className='py-5 text-[#f44336] mt-auto'>
-                    ₱ {product.price}
+                    ₱ {formatNumber(product.price)}
                   </p>
                   <button
                     className='bg-[#f44336] text-white px-5 py-2 rounded-md mt-auto'
