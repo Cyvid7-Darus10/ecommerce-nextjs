@@ -7,6 +7,7 @@ import Image from "next/image";
 // Utilities
 import data from "../../utils/data";
 import { Store } from "../../utils/Store";
+import { formatNumber } from "../../utils/utils";
 
 // Components
 import Layout from "../../components/Layout";
@@ -37,14 +38,14 @@ export default function ProductScreen() {
 
     const quantity = existItem ? existItem.quantity + 1 : 1;
     dispatch({
-      type: "CART_ADD_ITEM",
+      type: "CART_UPDATE_ITEM",
       payload: { ...product, quantity: quantity },
     });
   };
 
   return (
     <>
-      <Layout title='Product'>
+      <Layout title='Product' smallHeader={true}>
         <div className='container px-0 mx-0 '>
           <div className='flex items-center py-2 px-5'>
             <Link href='/products'>
@@ -71,7 +72,7 @@ export default function ProductScreen() {
               <div className='w-100 h-100'>
                 <h1 className='text-3xl font-semibold'>{product.name}</h1>
                 <p className='text-2xl font-semibold py-2'>
-                  Price: ₱{product.price}
+                  Price: ₱{formatNumber(product.price)}
                 </p>
                 <p className='text-xl font-semibold py-2'>Description:</p>
                 <p className='text-lg py-2'>{product.description}</p>
@@ -109,7 +110,9 @@ export default function ProductScreen() {
                 <p className='text-xl font-bold text-left mt-auto'>
                   {product.name}
                 </p>
-                <p className='py-5 text-[#f44336] mt-auto'>₱ {product.price}</p>
+                <p className='py-5 text-[#f44336] mt-auto'>
+                  ₱ {formatNumber(product.price)}
+                </p>
               </div>
             ))}
           </div>
