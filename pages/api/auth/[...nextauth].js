@@ -41,5 +41,5 @@ export default NextAuth({
       },
     }),
   ],
-  secret: "E5JIasIlPaYbK0uJPSGjYSvmp7Y8Dz/cc7JzJ66jBsQ=",
+  secret: process.env.NEXT_PUBLIC_SECRET,
 });
