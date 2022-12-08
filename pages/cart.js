@@ -22,7 +22,9 @@ import { useRouter } from "next/router";
 // Components
 import Modal from "../components/Modal";
 
-export default function CartScreen() {
+import dynamic from "next/dynamic";
+
+function CartScreen() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
@@ -190,3 +192,5 @@ export default function CartScreen() {
     </>
   );
 }
+
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });

@@ -44,6 +44,7 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
   const { cart } = state;
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openCart, setOpenCart] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const [modalDetail, setModalDetail] = useState({
     message: "",
     status: "",
@@ -100,6 +101,10 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
   useEffect(() => {
     setIsPortrait(height > width);
   }, [height, width]);
+
+  useEffect(() => {
+    setCartItemCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
+  }, [cart.cartItems]);
 
   useEffect(() => {
     if (
@@ -296,7 +301,7 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
                     <ShoppingCartIcon />
                     {cart.cartItems.length > 0 && (
                       <span className='ml-1 rounded-full bg-[#f44336] text-white px-2 py-1 text-xs font-bold'>
-                        {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                        {cartItemCount}
                       </span>
                     )}
                   </button>
@@ -440,13 +445,13 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
                     <div className='ml-4'>
                       <div>{item.name}</div>
                       <div className='text-[#999999]  flex flex-row justify-between'>
-                        <span>
+                        <span className='flex flex-row'>
                           {item.quantity} x ₱{formatNumber(item.price)} ={" "}
                           <span className='text-[#f44336]'>
                             ₱{formatNumber(item.quantity * item.price)}
                           </span>
                         </span>
-                        <div>
+                        <div className='flex flex-row'>
                           <button
                             className='ml-2'
                             onClick={() => {
