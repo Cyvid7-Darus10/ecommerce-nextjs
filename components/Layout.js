@@ -225,7 +225,11 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
 
                 {/* Menus */}
                 <div className='text-sm hidden lg:flex flex-row'>
-                  {title !== "Home" && <Link href='/'>Home</Link>}
+                  {title !== "Home" && (
+                    <Link href='/' className='p-2 custom-hover'>
+                      Home
+                    </Link>
+                  )}
                   <Link href='/about' className='p-2 custom-hover'>
                     About
                   </Link>
