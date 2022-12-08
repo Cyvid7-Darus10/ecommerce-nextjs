@@ -5,10 +5,6 @@ import User from "../../../models/User";
 import db from "../../../utils/db";
 
 export default NextAuth({
-  session: {
-    strategy: "jwt",
-    maxAge: 3000,
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (user?._id) token._id = user._id;
@@ -43,4 +39,9 @@ export default NextAuth({
     }),
   ],
   secret: process.env.NEXT_PUBLIC_SECRET,
+  session: {
+    strategy: "jwt",
+    jwt: true,
+    maxAge: 30 * 24 * 60 * 60,
+  },
 });
