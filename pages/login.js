@@ -35,8 +35,6 @@ export default function LoginScreen() {
       });
       if (result.error) {
         toast.error(result.error);
-      } else {
-        window.location.href = "/";
       }
     } catch (err) {
       toast.error(getError(err));
