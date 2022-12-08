@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 import { TransitionScroll } from "react-transition-scroll";
 import "react-transition-scroll/dist/index.css";
@@ -20,6 +21,10 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
 // Utilities
 import { Store } from "../utils/Store";
 import { formatNumber } from "../utils/utils";
@@ -27,10 +32,16 @@ import { formatNumber } from "../utils/utils";
 // Components
 import Modal from "../components/Modal";
 
+// Styles
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import Cookies from "js-cookie";
+
 export default function Layout({ title, smallHeader, children, bgImage }) {
+  const { status, data: session } = useSession();
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
-
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [modalDetail, setModalDetail] = useState({
@@ -39,6 +50,12 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
     show: false,
     action: () => {},
   });
+
+  const logoutClickHandler = () => {
+    Cookies.remove("cart");
+    dispatch({ type: "CART_RESET" });
+    signOut({ callbackUrl: "/login" });
+  };
 
   const cartQuantityActionHandler = (product, action) => {
     const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
@@ -92,8 +109,19 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
       setOpenCart(true);
   }, [cart, title]);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
+      <ToastContainer position='bottom-center' limit={1} />
       <style jsx>
         {`
           .custom-text-title:before {
@@ -212,9 +240,48 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
                   <Link href='/contact' className='p-2 custom-hover'>
                     Contact Us
                   </Link>
-                  <Link href='/account' className='p-2 custom-hover'>
-                    Account
-                  </Link>
+                  {status === "loading" ? (
+                    <Link href='/login' className='p-2 custom-hover'>
+                      Loading...
+                    </Link>
+                  ) : session?.user ? (
+                    <div className='overflow-hidden'>
+                      <Button
+                        id='basic-button'
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup='true'
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={(e) => {
+                          handleClick(e);
+                        }}
+                      >
+                        <span className='text-white'>
+                          {session?.user?.name}
+                        </span>
+                      </Button>
+                      <Menu
+                        id='basic-menu'
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem>
+                          <Link href='/profile'>Profile</Link>
+                        </MenuItem>
+                        <MenuItem href='/order-history'>
+                          <Link href='/order-history'>Order History</Link>
+                        </MenuItem>
+                        <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
+                      </Menu>
+                    </div>
+                  ) : (
+                    <Link href='/login' className='p-2 custom-hover'>
+                      Login
+                    </Link>
+                  )}
                   <button
                     className='p-2 custom-hover'
                     onClick={() => {
@@ -300,9 +367,17 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
             <Link href='/contact' className='p-2 custom-hover'>
               Contact Us
             </Link>
-            <Link href='/account' className='p-2 custom-hover'>
-              Account
-            </Link>
+            {status === "loading" ? (
+              "Loading"
+            ) : session?.user ? (
+              <Link href='/account' className='p-2 custom-hover'>
+                {session.user.name}
+              </Link>
+            ) : (
+              <Link href='/login' className='p-2 custom-hover'>
+                Login
+              </Link>
+            )}
           </div>
         </div>
 
