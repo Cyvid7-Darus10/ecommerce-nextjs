@@ -1,8 +1,9 @@
 import "../styles/globals.css";
+import { SessionProvider } from "next-auth/react";
 import { StoreProvider } from "../utils/Store";
 import { useEffect, useState } from "react";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
@@ -12,9 +13,11 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       {domLoaded && (
-        <StoreProvider>
-          <Component {...pageProps} />
-        </StoreProvider>
+        <SessionProvider session={session}>
+          <StoreProvider>
+            <Component {...pageProps} />
+          </StoreProvider>
+        </SessionProvider>
       )}
     </>
   );
