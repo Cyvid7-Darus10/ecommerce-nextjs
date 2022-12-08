@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 
 import Layout from "../components/Layout";
 import Pagination from "../components/Pagination";
@@ -17,8 +17,8 @@ import Link from "next/link";
 
 export default function Home() {
   const { state, dispatch } = useContext(Store);
-  const [items, setItems] = useState(data.products);
-  const [loading, setLoading] = useState(false);
+  const [items] = useState(data.products);
+  const [loading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
 
