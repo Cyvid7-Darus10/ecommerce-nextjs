@@ -37,8 +37,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Cookies from "js-cookie";
+import dynamic from "next/dynamic";
 
-export default function Layout({ title, smallHeader, children, bgImage }) {
+function Layout({ title, smallHeader, children, bgImage }) {
   const { status, data: session } = useSession();
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
@@ -395,7 +396,7 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
         <div
           className={`${
             openCart ? "opacity-95" : "opacity-10  translate-x-full"
-          } fixed bg-white z-50 right-0 top-0 h-full w-3/4 lg:w-1/4 shadow-md transition-all duration-500 overflow-x-scroll`}
+          } fixed bg-white z-50 right-0 top-0 h-full w-3/4 lg:w-1/3 shadow-md transition-all duration-500 overflow-x-scroll`}
         >
           <button
             className='absolute top-0 left-0 p-2'
@@ -446,7 +447,10 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
                       <div>{item.name}</div>
                       <div className='text-[#999999]  flex flex-row justify-between'>
                         <span className='flex flex-row'>
-                          {item.quantity} x ₱{formatNumber(item.price)} ={" "}
+                          <span>
+                            {item.quantity} x ₱{formatNumber(item.price)}
+                            {" = "}
+                          </span>
                           <span className='text-[#f44336]'>
                             ₱{formatNumber(item.quantity * item.price)}
                           </span>
@@ -587,3 +591,5 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
     </>
   );
 }
+
+export default dynamic(() => Promise.resolve(Layout), { ssr: false });
