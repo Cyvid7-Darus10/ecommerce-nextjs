@@ -203,7 +203,12 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
           )}
 
           {/* Navbar */}
-          <TransitionScroll>
+          <TransitionScroll
+            hiddenStyle={{
+              opacity: 50,
+              filter: "blur(2px)",
+            }}
+          >
             <nav
               className={`lg:px-10 ${
                 smallHeader ? "py-0" : "lg:py-5"
