@@ -21,9 +21,17 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+// import Button from "@mui/material/Button";
+// import Menu from "@mui/material/Menu";
+// import MenuItem from "@mui/material/MenuItem";
+
+import {
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+  Button,
+} from "@material-tailwind/react";
 
 // Utilities
 import { Store } from "../utils/Store";
@@ -114,16 +122,6 @@ function Layout({ title, smallHeader, children, bgImage }) {
     )
       setOpenCart(true);
   }, [cart, title]);
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <>
@@ -230,7 +228,7 @@ function Layout({ title, smallHeader, children, bgImage }) {
                 />
 
                 {/* Menus */}
-                <div className='text-sm hidden lg:flex flex-row'>
+                <div className='text-sm hidden lg:flex flex-row items-center'>
                   {title !== "Home" && (
                     <Link href='/' className='p-2 custom-hover'>
                       Home
@@ -256,38 +254,24 @@ function Layout({ title, smallHeader, children, bgImage }) {
                       Loading...
                     </Link>
                   ) : session?.user ? (
-                    <div className='overflow-hidden'>
-                      <Button
-                        id='basic-button'
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup='true'
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={(e) => {
-                          handleClick(e);
-                        }}
-                      >
-                        <span className='text-white'>
-                          {session?.user?.name}
-                        </span>
-                      </Button>
-                      <Menu
-                        id='basic-menu'
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{
-                          "aria-labelledby": "basic-button",
-                        }}
-                      >
+                    <Menu>
+                      <MenuHandler>
+                        <Button variant='gradient' color='white'>
+                          {session.user.name}
+                        </Button>
+                      </MenuHandler>
+                      <MenuList>
                         <MenuItem>
                           <Link href='/profile'>Profile</Link>
                         </MenuItem>
-                        <MenuItem href='/order-history'>
+                        <MenuItem>
                           <Link href='/order-history'>Order History</Link>
                         </MenuItem>
-                        <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
-                      </Menu>
-                    </div>
+                        <MenuItem>
+                          <button onClick={logoutClickHandler}>Logout</button>
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
                   ) : (
                     <Link href='/login' className='p-2 custom-hover'>
                       Login
