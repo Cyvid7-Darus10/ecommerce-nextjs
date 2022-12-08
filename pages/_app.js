@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { StoreProvider } from "../utils/Store";
 import { useEffect, useState } from "react";
+import { ThemeProvider } from "@material-tailwind/react";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -15,7 +16,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       {domLoaded && (
         <SessionProvider session={session}>
           <StoreProvider>
-            <Component {...pageProps} />
+            <ThemeProvider>
+              <Component {...pageProps} />
+            </ThemeProvider>
           </StoreProvider>
         </SessionProvider>
       )}

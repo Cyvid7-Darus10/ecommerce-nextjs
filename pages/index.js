@@ -37,7 +37,7 @@ export default function Home() {
         `}
       </style>
       <Layout title='Home' bgImage={"/images/indexbg-min.jpg"}>
-        <div className='container px-0 mx-0'>
+        <div className='px-0 mx-0'>
           <TransitionScroll
             reAnimate={true}
             hiddenStyle={{

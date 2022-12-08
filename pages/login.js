@@ -6,6 +6,8 @@ import Layout from "../components/Layout";
 import { getError } from "../utils/error";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { Input } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 
 export default function LoginScreen() {
   const { status, data: session } = useSession();
@@ -49,8 +51,7 @@ export default function LoginScreen() {
       >
         <div className='shadow-md p-5 py-10 my-10 lg:mb-80 rounded-md bg-transparent'>
           <div className='mb-4'>
-            <label htmlFor='email'>Email</label>
-            <input
+            <Input
               type='email'
               {...register("email", {
                 required: "Please enter email",
@@ -60,16 +61,14 @@ export default function LoginScreen() {
                 },
               })}
               className='w-full border border-gray-300 rounded-md h-10 px-2'
-              id='email'
-              autoFocus
-            ></input>
+              label='Email'
+            />
             {errors.email && (
               <div className='text-red-500'>{errors.email.message}</div>
             )}
           </div>
           <div className='mb-4'>
-            <label htmlFor='password'>Password</label>
-            <input
+            <Input
               type='password'
               {...register("password", {
                 required: "Please enter password",
@@ -80,19 +79,16 @@ export default function LoginScreen() {
               })}
               className='w-full border border-gray-300 rounded-md h-10 px-2'
               id='password'
-              autoFocus
-            ></input>
+              label='Password'
+            />
             {errors.password && (
               <div className='text-red-500 '>{errors.password.message}</div>
             )}
           </div>
           <div className='mb-4 '>
-            <button
-              className='bg-[#f44336] text-white px-5 py-2 rounded-md'
-              type='submit'
-            >
+            <Button color='red' type='submit' className='w-full'>
               Login
-            </button>
+            </Button>
           </div>
           <div className='mb-4 '>
             Don&apos;t have an account? &nbsp;

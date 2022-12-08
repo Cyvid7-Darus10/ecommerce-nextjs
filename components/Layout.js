@@ -473,7 +473,7 @@ export default function Layout({ title, smallHeader, children, bgImage }) {
           )}
         </div>
 
-        <main className='container m-auto mt-4'>{children}</main>
+        <main className='mt-4 flex justify-center'>{children}</main>
 
         <footer className='shadow-md'>
           <div className='flex flex-wrap justify-between px-10 lg:px-20 pt-8 bg-[#111111] text-white shadow-inner pb-5'>

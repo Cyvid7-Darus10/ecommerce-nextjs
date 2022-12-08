@@ -77,7 +77,7 @@ export default function CartScreen() {
   return (
     <>
       <Layout title='Cart' smallHeader={true}>
-        <div className='container px-0 mx-0'>
+        <div className='container'>
           <Link href='/products' className='flex items-center px-2 lg:px-0'>
             <ArrowBackIcon className='text-[#f44336] text-2xl mr-2' />
             <p className='text-[#f44336] text-xl'>Back to Products</p>
