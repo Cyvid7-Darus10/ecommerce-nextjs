@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Layout title='About' bgImage={"/images/aboutus-min.jpg"}>
-        <div className='container px-0 mx-0'>
+        <div className='px-0 mx-0'>
           <p className='text-[#f44336] italic text-center py-2'>
             Home → About Us
           </p>
