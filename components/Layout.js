@@ -22,8 +22,6 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-import axios from "axios";
-
 import {
   Menu,
   MenuHandler,
@@ -81,9 +79,7 @@ function Layout({ title, smallHeader, children, bgImage }) {
         return false;
     }
 
-    const { data } = await axios.get(`/api/products/${product._id}`);
-
-    if (data.countInStock < quantity) {
+    if (product.countInStock < quantity) {
       return toast.error("Sorry. Product is out of stock", { autoClose: 500 });
     }
 

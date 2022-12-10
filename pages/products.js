@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -34,9 +33,8 @@ export default function Home({ products }) {
   const addToCartHandler = async (product) => {
     const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
 
-    if (data.countInStock < quantity) {
+    if (product.countInStock < quantity) {
       return toast.error("Sorry. Product is out of stock");
     }
     dispatch({ type: "CART_UPDATE_ITEM", payload: { ...product, quantity } });
@@ -98,6 +96,7 @@ export default function Home({ products }) {
 export async function getServerSideProps() {
   await db.connect();
   const products = await Product.find().lean();
+  await db.disconnect();
   return {
     props: {
       products: products.map(db.convertDocToObj),
