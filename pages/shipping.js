@@ -5,9 +5,13 @@ import CheckoutWizard from "../components/CheckoutWizard";
 import Layout from "../components/Layout";
 import { Store } from "../utils/Store";
 import { useRouter } from "next/router";
-import { Input } from "@material-tailwind/react";
-import { Button } from "@material-tailwind/react";
-
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Button,
+  Input,
+} from "@material-tailwind/react";
 export default function ShippingScreen() {
   const {
     handleSubmit,
@@ -59,82 +63,89 @@ export default function ShippingScreen() {
           className='mx-auto w-full max-w-xl h-screen'
           onSubmit={handleSubmit(submitHandler)}
         >
-          <h1 className='mb-4 text-xl'>Shipping Address</h1>
-          <div className='mb-4'>
-            <Input
-              id='fullName'
-              autoFocus
-              {...register("fullName", {
-                required: "Please enter full name",
-              })}
-              className='w-full border border-gray-300 rounded-md h-10 px-2'
-              label='Full Name'
-            />
-            {errors.fullName && (
-              <div className='text-red-500'>{errors.fullName.message}</div>
-            )}
-          </div>
-          <div className='mb-4'>
-            <Input
-              id='address'
-              {...register("address", {
-                required: "Please enter address",
-                minLength: {
-                  value: 3,
-                  message: "Address is more than 2 chars",
-                },
-              })}
-              className='w-full border border-gray-300 rounded-md h-10 px-2'
-              label='Address'
-            />
-            {errors.address && (
-              <div className='text-red-500'>{errors.address.message}</div>
-            )}
-          </div>
-          <div className='mb-4'>
-            <Input
-              id='city'
-              {...register("city", {
-                required: "Please enter city",
-              })}
-              className='w-full border border-gray-300 rounded-md h-10 px-2'
-              label='City'
-            />
-            {errors.city && (
-              <div className='text-red-500 '>{errors.city.message}</div>
-            )}
-          </div>
-          <div className='mb-4'>
-            <Input
-              id='postalCode'
-              {...register("postalCode", {
-                required: "Please enter postal code",
-              })}
-              className='w-full border border-gray-300 rounded-md h-10 px-2'
-              label='Postal Code'
-            />
-            {errors.postalCode && (
-              <div className='text-red-500 '>{errors.postalCode.message}</div>
-            )}
-          </div>
-          <div className='mb-4'>
-            <Input
-              id='country'
-              {...register("country", {
-                required: "Please enter country",
-              })}
-              className='w-full border border-gray-300 rounded-md h-10 px-2'
-              label='Postal Code'
-            />
-            {errors.country && (
-              <div className='text-red-500 '>{errors.country.message}</div>
-            )}
-          </div>
-          <div className='mb-4 flex justify-between'>
-            <Button color='red' type='submit' className='w-full'>
-              Next
-            </Button>
-          </div>
+          <Card>
+            <CardBody className='flex flex-col gap-4'>
+              <div className='mb-4'>
+                <Input
+                  id='fullName'
+                  autoFocus
+                  {...register("fullName", {
+                    required: "Please enter full name",
+                  })}
+                  className='w-full border border-gray-300 rounded-md h-10 px-2'
+                  label='Full Name'
+                />
+                {errors.fullName && (
+                  <div className='text-red-500'>{errors.fullName.message}</div>
+                )}
+              </div>
+              <div className='mb-4'>
+                <Input
+                  id='address'
+                  {...register("address", {
+                    required: "Please enter address",
+                    minLength: {
+                      value: 3,
+                      message: "Address is more than 2 chars",
+                    },
+                  })}
+                  className='w-full border border-gray-300 rounded-md h-10 px-2'
+                  label='Address'
+                />
+                {errors.address && (
+                  <div className='text-red-500'>{errors.address.message}</div>
+                )}
+              </div>
+              <div className='mb-4'>
+                <Input
+                  id='city'
+                  {...register("city", {
+                    required: "Please enter city",
+                  })}
+                  className='w-full border border-gray-300 rounded-md h-10 px-2'
+                  label='City'
+                />
+                {errors.city && (
+                  <div className='text-red-500 '>{errors.city.message}</div>
+                )}
+              </div>
+              <div className='mb-4'>
+                <Input
+                  id='postalCode'
+                  {...register("postalCode", {
+                    required: "Please enter postal code",
+                  })}
+                  className='w-full border border-gray-300 rounded-md h-10 px-2'
+                  label='Postal Code'
+                />
+                {errors.postalCode && (
+                  <div className='text-red-500 '>
+                    {errors.postalCode.message}
+                  </div>
+                )}
+              </div>
+              <div className='mb-4'>
+                <Input
+                  id='country'
+                  {...register("country", {
+                    required: "Please enter country",
+                  })}
+                  className='w-full border border-gray-300 rounded-md h-10 px-2'
+                  label='Country'
+                />
+                {errors.country && (
+                  <div className='text-red-500 '>{errors.country.message}</div>
+                )}
+              </div>
+            </CardBody>
+            <CardFooter className='pt-0'>
+              <div className='mb-4 flex justify-between'>
+                <Button color='red' type='submit' className='w-full'>
+                  Next
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
         </form>
       </div>
     </Layout>

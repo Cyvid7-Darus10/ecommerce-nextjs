@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <Layout title='Services' bgImage={"/images/services-bg-min.png"}>
-        <div className='container mx-0 lg:px-28'>
+        <div className='container h-min-screen lg:px-0 px-4'>
           <p className='text-[#f44336] italic text-center py-2'>
             Home → Contact Us
           </p>
