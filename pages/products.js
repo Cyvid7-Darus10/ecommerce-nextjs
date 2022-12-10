@@ -75,8 +75,7 @@ export default function Home() {
                     <div className='w-100 h-100 hover:transform hover:scale-110 transition duration-500 ease-in-out'>
                       <Image
                         src={product.image}
-                        alt='CCTV'
-                        className=''
+                        alt={product.name}
                         width={250}
                         height={250}
                       />
