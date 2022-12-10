@@ -3,6 +3,7 @@ import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 import { TransitionScroll } from "react-transition-scroll";
 import "react-transition-scroll/dist/index.css";
@@ -21,9 +22,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-// import Button from "@mui/material/Button";
-// import Menu from "@mui/material/Menu";
-// import MenuItem from "@mui/material/MenuItem";
+import axios from "axios";
 
 import {
   Menu,
@@ -67,7 +66,7 @@ function Layout({ title, smallHeader, children, bgImage }) {
     signOut({ callbackUrl: "/login" });
   };
 
-  const cartQuantityActionHandler = (product, action) => {
+  const cartQuantityActionHandler = async (product, action) => {
     const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
     let quantity;
 
@@ -80,6 +79,12 @@ function Layout({ title, smallHeader, children, bgImage }) {
         break;
       default:
         return false;
+    }
+
+    const { data } = await axios.get(`/api/products/${product._id}`);
+
+    if (data.countInStock < quantity) {
+      return toast.error("Sorry. Product is out of stock", { autoClose: 500 });
     }
 
     // If quantity is 0, show modal messag for confirmation
@@ -125,7 +130,7 @@ function Layout({ title, smallHeader, children, bgImage }) {
 
   return (
     <>
-      <ToastContainer position='bottom-center' limit={1} />
+      <ToastContainer position='bottom-center' />
       <style jsx>
         {`
           .custom-text-title:before {
@@ -305,19 +310,19 @@ function Layout({ title, smallHeader, children, bgImage }) {
 
               {title === "Home" && (
                 <div className='center-div'>
-                  <h1 className='text-6xl font-bold mb-16'>Why Choose Us?</h1>
-                  <p className=''>
+                  <h1 className='text-5xl lg:text-6xl font-bold mb-16'>
+                    Why Choose Us?
+                  </h1>
+                  <p className='text-sm lg:text-lg lg:px-96'>
                     We ensure that we provide our clients the best security and
-                    protection that we can give. <br />
-                    Our workers are highly trained and our equipment are
-                    guaranteed top-notch. All of these <br />
-                    are maintained well to perform at their best. Because at
-                    Cabsfour Security Systems <br />
-                    Services, We care for your safety
+                    protection that we can give Our workers are highly trained
+                    and our equipment are guaranteed top-notch. All of these are
+                    maintained well to perform at their best. Because at
+                    Cabsfour Security Systems Services, We care for your safety
                   </p>
                 </div>
               )}
-              {!smallHeader && (
+              {!smallHeader && title !== "Home" && (
                 <div className='center-div'>
                   <h1 className='text-4xl font-bold mb-16'>{title}</h1>
                 </div>
@@ -415,9 +420,9 @@ function Layout({ title, smallHeader, children, bgImage }) {
           )}
           {cart.cartItems.length > 0 && (
             <div className='flex flex-col'>
-              {cart.cartItems.map((item) => (
+              {cart.cartItems.map((item, index) => (
                 <div
-                  key={item.id}
+                  key={index}
                   className='flex flex-row justify-between items-center p-4 border border-b-[#f44336]'
                 >
                   <div className='flex flex-row items-center'>

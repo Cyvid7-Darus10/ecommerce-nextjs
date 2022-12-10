@@ -20,19 +20,19 @@ function reducer(state, action) {
           cart: {
             ...state.cart,
             cartItems: state.cart.cartItems.filter(
-              (item) => item.id !== newItem.id
+              (item) => item.slug !== newItem.slug
             ),
           },
         };
       }
 
       const existItem = state.cart.cartItems.find(
-        (item) => item.id === newItem.id
+        (item) => item.slug === newItem.slug
       );
 
       const cartItems = existItem
         ? state.cart.cartItems.map((item) =>
-            item.id === existItem.id ? newItem : item
+            item.slug === existItem.slug ? newItem : item
           )
         : [...state.cart.cartItems, newItem];
       Cookies.set("cart", JSON.stringify({ ...state.cart, cartItems }));

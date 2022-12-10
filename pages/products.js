@@ -1,23 +1,24 @@
-import React, { useContext, useState } from "react";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 import Layout from "../components/Layout";
+import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
 
-import Image from "next/image";
-
 import SearchIcon from "@mui/icons-material/Search";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 // Utilities
-import data from "../utils/data";
 import { Store } from "../utils/Store";
-import { formatNumber } from "../utils/utils";
 
-import Link from "next/link";
+import Product from "../models/Product";
 
-export default function Home() {
+import db from "../utils/db";
+
+export default function Home({ products }) {
   const { state, dispatch } = useContext(Store);
-  const [items] = useState(data.products);
+  const { cart } = state;
+
   const [loading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
@@ -25,19 +26,22 @@ export default function Home() {
   // Get current items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const addToCartHandler = (product) => {
-    const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
-
+  const addToCartHandler = async (product) => {
+    const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
-    dispatch({
-      type: "CART_UPDATE_ITEM",
-      payload: { ...product, quantity: quantity },
-    });
+    const { data } = await axios.get(`/api/products/${product._id}`);
+
+    if (data.countInStock < quantity) {
+      return toast.error("Sorry. Product is out of stock");
+    }
+    dispatch({ type: "CART_UPDATE_ITEM", payload: { ...product, quantity } });
+
+    toast.success("Product added to the cart", { autoClose: 500 });
   };
 
   return (
@@ -65,36 +69,13 @@ export default function Home() {
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pb-12 px-5'>
             {!loading &&
-              data?.products &&
-              currentItems.map((product) => (
-                <div
-                  className='flex flex-col items-center py-10 px-5 border border-gray-200 rounded-md shadow-md'
-                  key={product.id}
-                >
-                  <Link href={`/product/${product.slug}`}>
-                    <div className='w-100 h-100 hover:transform hover:scale-110 transition duration-500 ease-in-out'>
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={250}
-                        height={250}
-                      />
-                    </div>
-                  </Link>
-
-                  <p className='text-xl font-bold text-left mt-auto'>
-                    {product.name}
-                  </p>
-                  <p className='py-5 text-[#f44336] mt-auto'>
-                    ₱ {formatNumber(product.price)}
-                  </p>
-                  <button
-                    className='bg-[#f44336] text-white px-5 py-2 rounded-md mt-auto'
-                    onClick={() => addToCartHandler(product)}
-                  >
-                    <AddShoppingCartIcon className='text-white text-2xl' />
-                  </button>
-                </div>
+              products &&
+              currentItems.map((product, index) => (
+                <ProductCard
+                  key={index}
+                  product={product}
+                  addToCartHandler={addToCartHandler}
+                />
               ))}
           </div>
           {loading && (
@@ -104,7 +85,7 @@ export default function Home() {
           )}
           <Pagination
             itemsPerPage={itemsPerPage}
-            totalItems={items.length}
+            totalItems={products.length}
             paginate={paginate}
             currentPage={currentPage}
           />
@@ -112,4 +93,14 @@ export default function Home() {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  await db.connect();
+  const products = await Product.find().lean();
+  return {
+    props: {
+      products: products.map(db.convertDocToObj),
+    },
+  };
 }
