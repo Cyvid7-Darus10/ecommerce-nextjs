@@ -24,6 +24,9 @@ import Modal from "../components/Modal";
 
 import dynamic from "next/dynamic";
 
+// Styles
+import { toast } from "react-toastify";
+
 function CartScreen() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
@@ -52,6 +55,10 @@ function CartScreen() {
         break;
       default:
         return false;
+    }
+
+    if (product.countInStock < quantity) {
+      return toast.error("Sorry. Product is out of stock");
     }
 
     // If quantity is 0, show modal messag for confirmation
