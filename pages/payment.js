@@ -38,11 +38,13 @@ export default function PaymentScreen() {
 
     router.push("/placeorder");
   };
+
   useEffect(() => {
     if (!shippingAddress.address) {
-      return router.push("/shipping");
+      router.push("/shipping");
     }
     setSelectedPaymentMethod(paymentMethod || "");
+    return () => {};
   }, [paymentMethod, router, shippingAddress.address]);
 
   return (
