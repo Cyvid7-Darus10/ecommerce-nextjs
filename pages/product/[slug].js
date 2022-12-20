@@ -11,16 +11,20 @@ import { formatNumber } from "../../utils/utils";
 
 // Components
 import Layout from "../../components/Layout";
+import { toast } from "react-toastify";
 
 // Icons
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-export default function ProductScreen() {
+// Database
+import Product from "../../models/Product";
+import db from "../../utils/db";
+
+export default function ProductScreen({ product }) {
   const { state, dispatch } = useContext(Store);
   const { query } = useRouter();
   const { slug } = query;
-  const product = data.products.find((x) => x.slug === slug);
   const [randomProducts, setRandomProducts] = useState([]);
 
   useEffect(() => {
@@ -37,6 +41,12 @@ export default function ProductScreen() {
     const existItem = state.cart.cartItems.find((x) => x.slug === slug);
 
     const quantity = existItem ? existItem.quantity + 1 : 1;
+
+    if (product.countInStock < quantity) {
+      toast.error("Sorry. Product is out of stock.");
+      return;
+    }
+
     dispatch({
       type: "CART_UPDATE_ITEM",
       payload: { ...product, quantity: quantity },
@@ -120,4 +130,18 @@ export default function ProductScreen() {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: product ? db.convertDocToObj(product) : null,
+    },
+  };
 }
