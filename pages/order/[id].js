@@ -6,6 +6,9 @@ import React, { useEffect, useReducer } from "react";
 import Layout from "../../components/Layout";
 import { getError } from "../../utils/error";
 import { Card, CardHeader, CardBody } from "@material-tailwind/react";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { toast } from "react-toastify";
+import { formatNumber } from "../../utils/utils";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -15,20 +18,30 @@ function reducer(state, action) {
       return { ...state, loading: false, order: action.payload, error: "" };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
+    case "PAY_REQUEST":
+      return { ...state, loadingPay: true };
+    case "PAY_SUCCESS":
+      return { ...state, loadingPay: false, successPay: true };
+    case "PAY_FAIL":
+      return { ...state, loadingPay: false, errorPay: action.payload };
+    case "PAY_RESET":
+      return { ...state, loadingPay: false, successPay: false, errorPay: "" };
     default:
       state;
   }
 }
 
 export default function OrderScreen() {
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const { query } = useRouter();
   const orderId = query.id;
 
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: "",
-  });
+  const [{ loading, error, order, successPay, loadingPay }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      order: {},
+      error: "",
+    });
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -40,10 +53,28 @@ export default function OrderScreen() {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
-    if (!order._id || (order._id && order._id !== orderId)) {
+    if (!order._id || successPay || (order._id && order._id !== orderId)) {
       fetchOrder();
+      if (successPay) {
+        dispatch({ type: "PAY_RESET" });
+      }
+    } else {
+      const loadPaypalScript = async () => {
+        const { data: clientId } = await axios.get("/api/keys/paypal");
+        console.log("CLIENT ID", clientId);
+        paypalDispatch({
+          type: "resetOptions",
+          value: {
+            "client-id": clientId,
+            currency: "PHP",
+          },
+        });
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+      };
+      console.log("LOADING PAYPAL");
+      loadPaypalScript();
     }
-  }, [order, orderId]);
+  }, [order, orderId, paypalDispatch, successPay]);
 
   const {
     shippingAddress,
@@ -58,6 +89,40 @@ export default function OrderScreen() {
     isDelivered,
     deliveredAt,
   } = order;
+
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: totalPrice },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  }
+
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+      try {
+        dispatch({ type: "PAY_REQUEST" });
+        const { data } = await axios.put(
+          `/api/orders/${order._id}/pay`,
+          details
+        );
+        dispatch({ type: "PAY_SUCCESS", payload: data });
+        toast.success("Order is paid successgully");
+      } catch (err) {
+        dispatch({ type: "PAY_FAIL", payload: getError(err) });
+        toast.error(getError(err));
+      }
+    });
+  }
+  function onError(err) {
+    toast.error(getError(err));
+  }
 
   return (
     <Layout title='Order' smallHeader={true}>
@@ -85,7 +150,7 @@ export default function OrderScreen() {
                     {shippingAddress.country}
                   </div>
                   {isDelivered ? (
-                    <div className='alert-success'>
+                    <div className='text-green-500'>
                       Delivered at {deliveredAt}
                     </div>
                   ) : (
@@ -100,7 +165,7 @@ export default function OrderScreen() {
                 <CardBody>
                   <div>{paymentMethod}</div>
                   {isPaid ? (
-                    <div className='alert-success'>Paid at {paidAt}</div>
+                    <div className='text-green-500'>Paid at {paidAt}</div>
                   ) : (
                     <div className='text-red-500'>Not paid</div>
                   )}
@@ -139,9 +204,11 @@ export default function OrderScreen() {
                             </Link>
                           </td>
                           <td className=' p-5 text-right'>{item.quantity}</td>
-                          <td className='p-5 text-right'>${item.price}</td>
                           <td className='p-5 text-right'>
-                            ${item.quantity * item.price}
+                            ₱{formatNumber(item.price)}
+                          </td>
+                          <td className='p-5 text-right'>
+                            ₱{formatNumber(item.quantity * item.price)}
                           </td>
                         </tr>
                       ))}
@@ -160,27 +227,43 @@ export default function OrderScreen() {
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Items</div>
-                        <div>${itemsPrice}</div>
+                        <div>₱{formatNumber(itemsPrice)}</div>
                       </div>
                     </li>
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Tax</div>
-                        <div>${taxPrice}</div>
+                        <div>₱{formatNumber(taxPrice)}</div>
                       </div>
                     </li>
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Shipping</div>
-                        <div>${shippingPrice}</div>
+                        <div>₱{formatNumber(shippingPrice)}</div>
                       </div>
                     </li>
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Total</div>
-                        <div>${totalPrice}</div>
+                        <div>₱{formatNumber(totalPrice)}</div>
                       </div>
                     </li>
+                    {!isPaid && (
+                      <li>
+                        {isPending ? (
+                          <div>Loading...</div>
+                        ) : (
+                          <div className='w-full'>
+                            <PayPalButtons
+                              createOrder={createOrder}
+                              onApprove={onApprove}
+                              onError={onError}
+                            ></PayPalButtons>
+                          </div>
+                        )}
+                        {loadingPay && <div>Loading...</div>}
+                      </li>
+                    )}
                   </ul>
                 </CardBody>
               </Card>

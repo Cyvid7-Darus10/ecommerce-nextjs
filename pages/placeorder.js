@@ -10,6 +10,7 @@ import Layout from "../components/Layout";
 import { getError } from "../utils/error";
 import { Store } from "../utils/Store";
 import { Card, CardHeader, CardBody, Button } from "@material-tailwind/react";
+import { formatNumber } from "../utils/utils";
 
 export default function PlaceOrderScreen() {
   const { state, dispatch } = useContext(Store);
@@ -168,25 +169,25 @@ export default function PlaceOrderScreen() {
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Items</div>
-                        <div>₱{itemsPrice}</div>
+                        <div>₱{formatNumber(itemsPrice)}</div>
                       </div>
                     </li>
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Tax</div>
-                        <div>₱{taxPrice}</div>
+                        <div>₱{formatNumber(taxPrice)}</div>
                       </div>
                     </li>
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Shipping</div>
-                        <div>₱{shippingPrice}</div>
+                        <div>₱{formatNumber(shippingPrice)}</div>
                       </div>
                     </li>
                     <li>
                       <div className='mb-2 flex justify-between'>
                         <div>Total</div>
-                        <div>₱{totalPrice}</div>
+                        <div>₱{formatNumber(totalPrice)}</div>
                       </div>
                     </li>
                     <li>
