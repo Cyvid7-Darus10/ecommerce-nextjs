@@ -61,7 +61,6 @@ export default function OrderScreen() {
     } else {
       const loadPaypalScript = async () => {
         const { data: clientId } = await axios.get("/api/keys/paypal");
-        console.log("CLIENT ID", clientId);
         paypalDispatch({
           type: "resetOptions",
           value: {
@@ -71,7 +70,6 @@ export default function OrderScreen() {
         });
         paypalDispatch({ type: "setLoadingStatus", value: "pending" });
       };
-      console.log("LOADING PAYPAL");
       loadPaypalScript();
     }
   }, [order, orderId, paypalDispatch, successPay]);
