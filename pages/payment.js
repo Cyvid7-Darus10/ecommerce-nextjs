@@ -75,7 +75,7 @@ export default function PaymentScreen() {
                 <Button onClick={() => router.push("/shipping")} color='gray'>
                   Back
                 </Button>
-                <Button className='primary-button' color='red'>
+                <Button className='primary-button' color='red' type='submit'>
                   Next
                 </Button>
               </div>
@@ -86,3 +86,5 @@ export default function PaymentScreen() {
     </Layout>
   );
 }
+
+PaymentScreen.auth = true;
