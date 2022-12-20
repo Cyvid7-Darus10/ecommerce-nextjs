@@ -90,7 +90,7 @@ export default function Home() {
                 Smarter Security, Professionally Installed
               </p>
               <Carousel
-                slidesToShow={isPortrait ? 3 : 6}
+                slidesToShow={isPortrait ? 3 : 4}
                 animation='zoom'
                 autoplay={true}
                 autoplayInterval={2000}
@@ -106,14 +106,14 @@ export default function Home() {
                   },
                 }}
               >
-                {data?.projects &&
-                  data.projects.map((project) => (
+                {data?.mainProjects &&
+                  data.mainProjects.map((project) => (
                     <div key={project.id}>
                       <Image
                         src={project.image}
                         alt='project'
-                        width={200}
-                        height={200}
+                        width={400}
+                        height={400}
                         className='rounded-md shadow-md'
                       />
                     </div>

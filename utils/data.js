@@ -178,6 +178,33 @@ const data = {
     },
   ],
 
+  mainProjects: [
+    {
+      id: 1,
+      image: "/images/project_section/project (1).jpg",
+    },
+    {
+      id: 2,
+      image: "/images/project_section/project (2).jpg",
+    },
+    {
+      id: 3,
+      image: "/images/project_section/project (3).jpg",
+    },
+    {
+      id: 4,
+      image: "/images/project_section/project (4).jpg",
+    },
+    {
+      id: 5,
+      image: "/images/project_section/project (5).jpg",
+    },
+    {
+      id: 6,
+      image: "/images/project_section/project (6).jpg",
+    },
+  ],
+
   projects: [
     {
       id: 1,
