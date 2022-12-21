@@ -6,8 +6,7 @@ import Layout from "../components/Layout";
 import { getError } from "../utils/error";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { Input } from "@material-tailwind/react";
-import { Button } from "@material-tailwind/react";
+import { Input, Button } from "@material-tailwind/react";
 
 export default function LoginScreen() {
   const { status, data: session } = useSession();
@@ -92,7 +91,10 @@ export default function LoginScreen() {
           </div>
           <div className='mb-4 '>
             Don&apos;t have an account? &nbsp;
-            <Link href='\register' className='text-blue-500'>
+            <Link
+              href={`/register?redirect=${redirect || "/"}`}
+              className='text-blue-500'
+            >
               Register
             </Link>
           </div>

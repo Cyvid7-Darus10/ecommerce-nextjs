@@ -257,8 +257,8 @@ function Layout({ title, smallHeader, children, bgImage }) {
                   ) : session?.user ? (
                     <Menu>
                       <MenuHandler>
-                        <Button variant='gradient' color='white'>
-                          {session.user.name}
+                        <Button variant='gradient' color='white' size='sm'>
+                          {session.user.userName}
                         </Button>
                       </MenuHandler>
                       <MenuList>
@@ -367,7 +367,7 @@ function Layout({ title, smallHeader, children, bgImage }) {
               "Loading"
             ) : session?.user ? (
               <Link href='/account' className='p-2 custom-hover'>
-                {session.user.name}
+                {session.user.userName}
               </Link>
             ) : (
               <Link href='/login' className='p-2 custom-hover'>
