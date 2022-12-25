@@ -57,7 +57,11 @@ export default function PaymentScreen() {
         >
           <Card>
             <CardBody className='flex flex-col gap-4'>
-              {["PayPal", "Stripe", "CashOnDelivery"].map((payment) => (
+              {[
+                "PayPal",
+                "Next Pay (Bank, Gcash, PayMaya, etc.)",
+                "Cash On Delivery",
+              ].map((payment) => (
                 <div key={payment} className='mb-4'>
                   <Radio
                     name='paymentMethod'

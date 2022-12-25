@@ -165,9 +165,15 @@ export default function OrderScreen() {
       }
     });
   }
+
   function onError(err) {
     toast.error(getError(err));
   }
+
+  const nextPay = () => {
+    // transfer to new tab
+    window.open("https://app.nextpay.world/#/pl/5Iy5aQK0k", "_blank");
+  };
 
   return (
     <Layout title='Order' smallHeader={true}>
@@ -307,6 +313,13 @@ export default function OrderScreen() {
                           </div>
                         )}
                         {loadingPay && <div>Loading...</div>}
+                      </li>
+                    )}
+                    {!isPaid && (
+                      <li>
+                        <Button onClick={nextPay} className='w-full'>
+                          Next Pay (Gcash, Paymaya, etc.)
+                        </Button>
                       </li>
                     )}
                     {session.user.isAdmin &&
