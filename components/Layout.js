@@ -268,6 +268,16 @@ function Layout({ title, smallHeader, children, bgImage }) {
                         <MenuItem>
                           <Link href='/order-history'>Order History</Link>
                         </MenuItem>
+                        {session.user.isAdmin && (
+                          <MenuItem>
+                            <Link
+                              href='admin/dashboard'
+                              className='text-red-500'
+                            >
+                              Admin Panel
+                            </Link>
+                          </MenuItem>
+                        )}
                         <MenuItem>
                           <button onClick={logoutClickHandler}>Logout</button>
                         </MenuItem>
