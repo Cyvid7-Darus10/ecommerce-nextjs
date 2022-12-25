@@ -294,13 +294,13 @@ export default function AdminProductEditScreen() {
                   </div>
                 )}
               </div>
-              <div className='mb-4'>
-                <Button disabled={loadingUpdate} className='primary-button'>
+              <div className='flex justify-between'>
+                <div className='mb-4'>
+                  <Link href={`/admin/products`}>Back</Link>
+                </div>
+                <Button disabled={loadingUpdate} type='submit'>
                   {loadingUpdate ? "Loading" : "Update"}
                 </Button>
-              </div>
-              <div className='mb-4'>
-                <Link href={`/admin/products`}>Back</Link>
               </div>
             </form>
           )}
