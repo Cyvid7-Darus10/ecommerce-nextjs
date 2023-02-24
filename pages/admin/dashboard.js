@@ -48,6 +48,7 @@ function reducer(state, action) {
       state;
   }
 }
+
 function AdminDashboardScreen() {
   const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
     loading: true,
