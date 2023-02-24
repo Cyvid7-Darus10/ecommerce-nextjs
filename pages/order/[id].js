@@ -72,6 +72,7 @@ export default function OrderScreen() {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/orders/${orderId}`);
+        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -175,6 +176,36 @@ export default function OrderScreen() {
     window.open("https://app.nextpay.world/#/pl/5Iy5aQK0k", "_blank");
   };
 
+  const printReceipt = () => {
+    const printContent = document.getElementById("receipt");
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContent.innerHTML;
+
+    const style = `
+      @media print {
+        @page {
+          size: landscape;
+        }
+      }
+    `;
+    const styleEl = document.createElement("style");
+    styleEl.textContent = style;
+    document.head.appendChild(styleEl);
+
+    window.print();
+    document.body.innerHTML = originalContents;
+  };
+
+  function FormattedDate(props) {
+    const date = new Date(props.date);
+    const formattedDate = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}`;
+    // Format the date as dd/mm/yyyy
+
+    return <span>{formattedDate}</span>;
+  }
+
   return (
     <Layout title='Order' smallHeader={true}>
       <div className='p-4 m-5 w-full'>
@@ -237,7 +268,7 @@ export default function OrderScreen() {
                       </tr>
                     </thead>
                     <tbody>
-                      {orderItems.map((item) => (
+                      {orderItems?.map((item) => (
                         <tr key={item._id} className='border-b'>
                           <td>
                             <Link
@@ -335,12 +366,98 @@ export default function OrderScreen() {
                           </Button>
                         </li>
                       )}
+                    {order.isPaid && order.isDelivered && (
+                      <li>
+                        {loadingDeliver && <div>Loading...</div>}
+                        <Button
+                          className='primary-button w-full'
+                          onClick={printReceipt}
+                        >
+                          Print Receipt
+                        </Button>
+                      </li>
+                    )}
                   </ul>
                 </CardBody>
               </Card>
             </div>
           </div>
         )}
+      </div>
+      <div id='receipt' className='hidden'>
+        <div className='flex flex-row items-center justify-between w-full h-full'>
+          <div>
+            <table className='table border-2'>
+              <tr className='border-2'>
+                <td className='border-2 text-center' colSpan={2}>
+                  In Settlement of The Following
+                </td>
+              </tr>
+              <tr className='border-2'>
+                <td className='border-2 text-center'>Particulars</td>
+                <td className='border-2 text-center'>Amount</td>
+              </tr>
+              {orderItems?.map((item, key) => (
+                <tr key={key} className='border-2'>
+                  <td className='border-2 w-3/4'>{item.name}</td>
+                  <td>₱{formatNumber(item.quantity * item.price)}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+          <div className='flex flex-col w-full h-full items-start ml-10'>
+            <h1 className='text-2xl'>
+              <strong>CABSFOR SECURITY SYSTEMS SERVICES</strong>
+            </h1>
+            <p>A Ricardo Bagac, Bataan</p>
+            <p>
+              <strong>LEMUILLE T. CABANTAV -</strong> Prop.
+            </p>
+            <p>
+              NON VAT Reg. TIN: <strong>481-999-558-000</strong>
+            </p>
+            <div className='flex items-center'>
+              <div className='text-lg underline'>
+                <strong>OFFICIAL RECEIPT</strong>
+              </div>
+              <div className='ml-40 italic'>
+                Date: <FormattedDate date={new Date(paidAt)} />
+              </div>
+            </div>
+            <div className='flex items-center text-sm'>
+              <div className='italic'>Received From:</div>
+              <div className='ml-2 italic underline'>cabsfour.vercel.app</div>
+              <div className='italic ml-2'>With TIN:</div>
+              <div className='ml-2 italic underline'>481-999-558-000</div>
+            </div>
+            <div className='flex items-center text-sm'>
+              <div className='italic'>and address at</div>
+              <div className='ml-2 italic underline'>
+                {shippingAddress?.address}, {shippingAddress?.city},{" "}
+                {shippingAddress?.postalCode}{" "}
+              </div>
+            </div>
+            <div className='flex items-center text-sm'>
+              <div className='italic'>the sum of</div>
+              <div className='ml-2 italic underline'>
+                {formatNumber(totalPrice)}
+              </div>
+              <div className='italic'> pesos</div>
+            </div>
+          </div>
+        </div>
+        <div className='flex flex-row justify-between w-full h-full text-xs mt-20'>
+          <div>
+            <p>10 BKLTS (2x) 000001-000500</p>
+            <p>BIR Authority to Print No. 4AU0002130036</p>
+            <p>Date Issued: 02-19-19 valid until: 02-18-24</p>
+            <p>KUYANG {"'"} S PRINTING PRESS Pb. Balanga, Bataan</p>
+            <p>Tel No. 791-1693 ** TIN: 159-331-346-000</p>
+          </div>
+          <div className='text-sm'>
+            By <span className='underline'>cabsfour.vercel.app</span>
+          </div>
+        </div>
       </div>
     </Layout>
   );
