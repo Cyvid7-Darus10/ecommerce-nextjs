@@ -129,7 +129,7 @@ export default function PlaceOrderScreen() {
                         <tr key={item._id} className='border-b'>
                           <td>
                             <Link
-                              href={`/product/₱{item.slug}`}
+                              href={`/product/${item.slug}`}
                               className='flex items-center'
                             >
                               <Image

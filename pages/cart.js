@@ -99,9 +99,9 @@ function CartScreen() {
                 )}
                 {cart.cartItems.length > 0 && (
                   <div className='flex flex-col'>
-                    {cart.cartItems.map((item) => (
+                    {cart.cartItems.map((item, key) => (
                       <div
-                        key={item.id}
+                        key={key}
                         className=' p-4 border border-b-[#f44336] min-w-[300px] lg:min-w-[800px] lg:max-w-[1000px] w-full'
                       >
                         <div className='flex flex-row justify-between items-center'>
