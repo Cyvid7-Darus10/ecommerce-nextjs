@@ -3,13 +3,22 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import Layout from "../../components/Layout";
 import { getError } from "../../utils/error";
-import { Card, CardHeader, CardBody, Button } from "@material-tailwind/react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
 import { formatNumber } from "../../utils/utils";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -49,7 +58,17 @@ export default function OrderScreen() {
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const { query } = useRouter();
   const orderId = query.id;
-
+  const [open, setOpen] = useState(false);
+  const [refundReason, setRefundReason] = useState("Damaged - default");
+  const [itemId, setItemId] = useState("");
+  const [openStatus, setOpenStatus] = useState(false);
+  const [status, setStatus] = useState({
+    status: "",
+    reason: "",
+    resolution: "",
+  });
+  const [resolveView, setResolveView] = useState(false);
+  const [resolveMessage, setResolveMessage] = useState("");
   const [
     {
       loading,
@@ -184,6 +203,61 @@ export default function OrderScreen() {
     document.body.innerHTML = originalContents;
   };
 
+  const refundHandler = (item_id) => {
+    setItemId(item_id);
+    setOpen(true);
+  };
+
+  const handleRefundRequest = async () => {
+    const { data } = await axios.post(`/api/orders/${order._id}/refund`, {
+      item_id: itemId,
+      reason: refundReason,
+    });
+    if (data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
+    setOpen(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  const refundView = (item) => {
+    setOpenStatus(true);
+    console.log(item);
+    setStatus({
+      status: item.refundStatus,
+      reason: item.refundReason,
+      resolution: item.refundResolution,
+    });
+  };
+
+  const resolveRefund = (item_id) => {
+    setResolveView(true);
+    setItemId(item_id);
+  };
+
+  const handleRefundResolution = async () => {
+    const { data } = await axios.post(
+      `/api/orders/${order._id}/resolve-refund`,
+      {
+        item_id: itemId,
+        resolve_message: resolveMessage,
+      }
+    );
+    if (data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
+    setResolveView(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
   return (
     <Layout title='Order' smallHeader={true}>
       <div className='p-4 m-5 w-full'>
@@ -243,6 +317,7 @@ export default function OrderScreen() {
                         <th className='p-5 text-right'>Quantity</th>
                         <th className='p-5 text-right'>Price</th>
                         <th className='p-5 text-right'>Subtotal</th>
+                        <th className='p-5 text-right'>Refund/Return</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -269,6 +344,34 @@ export default function OrderScreen() {
                           </td>
                           <td className='p-5 text-right'>
                             ₱{formatNumber(item.quantity * item.price)}
+                          </td>
+                          <td className='p-5 text-right'>
+                            {(item.refund || item?.refundResolution) && (
+                              <button
+                                className='bg-green-500 text-white px-2 py-1 rounded-sm'
+                                onClick={() => refundView(item)}
+                              >
+                                View Status
+                              </button>
+                            )}
+
+                            {!item.refund && order.isDelivered && (
+                              <button
+                                className='bg-red-500 text-white px-2 py-1 rounded-sm'
+                                onClick={() => refundHandler(item._id)}
+                              >
+                                Refund
+                              </button>
+                            )}
+
+                            {session.user.isAdmin && item.refund && (
+                              <button
+                                className='bg-blue-500 text-white px-2 py-1 rounded-sm mt-5'
+                                onClick={() => resolveRefund(item._id)}
+                              >
+                                Resolve
+                              </button>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -362,6 +465,95 @@ export default function OrderScreen() {
           </div>
         )}
       </div>
+      <Dialog open={openStatus} handler={() => setOpenStatus(false)}>
+        <DialogHeader>Refund Status</DialogHeader>
+        <DialogBody divider>
+          <div className='flex flex-col'>
+            <p>Refund Status: {status.status}</p>
+            <p>Refund Reason: {status.reason}</p>
+            <p>Refund Resolution: {status.resolution}</p>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant='text'
+            color='red'
+            onClick={() => setOpenStatus(false)}
+            className='mr-1'
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button
+            variant='gradient'
+            color='green'
+            onClick={handleRefundRequest}
+          >
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Dialog open={open} handler={() => setOpen(false)}>
+        <DialogHeader>Submit Claim</DialogHeader>
+        <DialogBody divider>
+          <select
+            className='w-full border-2 rounded-sm p-2'
+            onChange={(e) => setRefundReason(e.target.value)}
+          >
+            <option value=''>Select Reason</option>
+            <option value='Damaged'>Damaged</option>
+            <option value='Defective'>Defective</option>
+            <option value='Wrong Item'>Wrong Item</option>
+            <option value='Missing Item'>Missing Item</option>
+          </select>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant='text'
+            color='red'
+            onClick={() => setOpen(false)}
+            className='mr-1'
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button
+            variant='gradient'
+            color='green'
+            onClick={handleRefundRequest}
+          >
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Dialog open={resolveView} handler={() => setResolveView(false)}>
+        <DialogHeader>Resolve Message</DialogHeader>
+        <DialogBody divider>
+          <input
+            type='text'
+            className='w-full border-2 rounded-sm p-2'
+            onChange={(e) => setResolveMessage(e.target.value)}
+          />
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant='text'
+            color='red'
+            onClick={() => setResolveView(false)}
+            className='mr-1'
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button
+            variant='gradient'
+            color='green'
+            onClick={handleRefundResolution}
+          >
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
       <div id='receipt' className='hidden'>
         <div className='block'>
           <div className='flex flex-col items-center justify-center w-full h-full'>

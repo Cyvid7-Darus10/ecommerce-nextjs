@@ -29,7 +29,8 @@ export default function AdminOrderScreen() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/orders`);
+        const { data } = await axios.get(`/api/admin/refunds`);
+        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -47,15 +48,15 @@ export default function AdminOrderScreen() {
               <Link href='/admin/dashboard'>Dashboard</Link>
             </li>
             <li>
-              <Link href='/admin/orders' className='font-bold'>
-                Orders
-              </Link>
+              <Link href='/admin/orders'>Orders</Link>
             </li>
             <li>
               <Link href='/admin/products'>Products</Link>
             </li>
             <li>
-              <Link href='/admin/refunds'>Refund/Transfer</Link>
+              <Link href='/admin/refunds' className='font-bold'>
+                Refund/Transfer
+              </Link>
             </li>
             <li>
               <Link href='/admin/users'>Users</Link>
@@ -63,7 +64,7 @@ export default function AdminOrderScreen() {
           </ul>
         </div>
         <div className='overflow-x-auto md:col-span-3'>
-          <h1 className='mb-4 text-xl'>Admin Orders</h1>
+          <h1 className='mb-4 text-xl'>Admin Refund Requests</h1>
 
           {loading ? (
             <div>Loading...</div>

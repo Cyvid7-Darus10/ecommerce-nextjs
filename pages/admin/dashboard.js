@@ -97,6 +97,9 @@ function AdminDashboardScreen() {
               <Link href='/admin/products'>Products</Link>
             </li>
             <li>
+              <Link href='/admin/refunds'>Refund/Transfer</Link>
+            </li>
+            <li>
               <Link href='/admin/users'>Users</Link>
             </li>
           </ul>
