@@ -188,7 +188,7 @@ function Layout({ title, smallHeader, children, bgImage }) {
           {/* Banner */}
           {title === "Home" && !isPortrait && (
             <nav
-              className={`flex lg:h-10 h-5 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white`}
+              className={`hidden text-sm lg:flex lg:h-10 h-5 items-center px-4 lg:px-10 lg:justify-between shadow-md bg-[#f44336] text-white`}
             >
               <div className='flex items-center'>
                 <LocationOnIcon />
@@ -302,7 +302,7 @@ function Layout({ title, smallHeader, children, bgImage }) {
                     )}
                   </button>
                 </div>
-                <div className='lg:hidden'>
+                <div className='lg:hidden z-50'>
                   <button
                     className='p-2'
                     onClick={() => {
@@ -316,10 +316,10 @@ function Layout({ title, smallHeader, children, bgImage }) {
 
               {title === "Home" && (
                 <div className='center-div'>
-                  <h1 className='text-5xl lg:text-6xl font-bold mb-16'>
+                  <h1 className='text-2xl mt-20 lg:mt-0 md:text-5xl lg:text-6xl font-bold mb-16'>
                     Why Choose Us?
                   </h1>
-                  <p className='text-sm lg:text-lg lg:px-96'>
+                  <p className='text-sm lg:text-lg xl:px-96'>
                     We ensure that we provide our clients the best security and
                     protection that we can give Our workers are highly trained
                     and our equipment are guaranteed top-notch. All of these are
