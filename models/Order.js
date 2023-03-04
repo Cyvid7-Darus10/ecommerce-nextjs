@@ -33,7 +33,7 @@ const orderSchema = new mongoose.Schema(
     paidAt: { type: Date },
     deliveredAt: { type: Date },
     refundedAt: { type: Date },
-    currentLocation: { type: String },
+    currentLocation: { type: String, default: "Processing" },
   },
   {
     timestamps: true,

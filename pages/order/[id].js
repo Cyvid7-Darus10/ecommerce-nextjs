@@ -69,6 +69,7 @@ export default function OrderScreen() {
   });
   const [resolveView, setResolveView] = useState(false);
   const [resolveMessage, setResolveMessage] = useState("");
+  const [openDeliveryView, setOpenDeliveryView] = useState(false);
   const [
     {
       loading,
@@ -258,6 +259,24 @@ export default function OrderScreen() {
     }, 1000);
   };
 
+  const updateDeliveryLocation = async () => {
+    const { data } = await axios.post(
+      `/api/orders/${order._id}/update-delivery-location`,
+      {
+        delivery_location: resolveMessage,
+      }
+    );
+    if (data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
+    setOpenDeliveryView(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
   return (
     <Layout title='Order' smallHeader={true}>
       <div className='p-4 m-5 w-full'>
@@ -288,7 +307,12 @@ export default function OrderScreen() {
                       Delivered at {deliveredAt}
                     </div>
                   ) : (
-                    <div className='text-red-500'>Not delivered</div>
+                    <>
+                      <div className='text-red-500'>Not delivered</div>
+                      <div className='text-green-500'>
+                        Current Location: {order.currentLocation}
+                      </div>
+                    </>
                   )}
                 </CardBody>
               </Card>
@@ -355,14 +379,16 @@ export default function OrderScreen() {
                               </button>
                             )}
 
-                            {!item.refund && order.isDelivered && (
-                              <button
-                                className='bg-red-500 text-white px-2 py-1 rounded-sm'
-                                onClick={() => refundHandler(item._id)}
-                              >
-                                Refund
-                              </button>
-                            )}
+                            {!item.refund &&
+                              order.isDelivered &&
+                              !item?.refundResolution && (
+                                <button
+                                  className='bg-red-500 text-white px-2 py-1 rounded-sm'
+                                  onClick={() => refundHandler(item._id)}
+                                >
+                                  Refund
+                                </button>
+                              )}
 
                             {session.user.isAdmin && item.refund && (
                               <button
@@ -458,6 +484,17 @@ export default function OrderScreen() {
                         </Button>
                       </li>
                     )}
+                    {!order.isDelivered && (
+                      <li>
+                        {loadingDeliver && <div>Loading...</div>}
+                        <Button
+                          className='primary-green w-full mt-10'
+                          onClick={() => setOpenDeliveryView(true)}
+                        >
+                          Update Delivery Status
+                        </Button>
+                      </li>
+                    )}
                   </ul>
                 </CardBody>
               </Card>
@@ -548,6 +585,37 @@ export default function OrderScreen() {
             variant='gradient'
             color='green'
             onClick={handleRefundResolution}
+          >
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Dialog
+        open={openDeliveryView}
+        handler={() => setOpenDeliveryView(false)}
+      >
+        <DialogHeader>Update Delivery Location</DialogHeader>
+        <DialogBody divider>
+          <input
+            type='text'
+            className='w-full border-2 rounded-sm p-2'
+            onChange={(e) => setResolveMessage(e.target.value)}
+          />
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant='text'
+            color='red'
+            onClick={() => setResolveView(false)}
+            className='mr-1'
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button
+            variant='gradient'
+            color='green'
+            onClick={updateDeliveryLocation}
           >
             <span>Confirm</span>
           </Button>
