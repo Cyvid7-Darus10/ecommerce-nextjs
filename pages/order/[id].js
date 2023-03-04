@@ -447,8 +447,8 @@ export default function OrderScreen() {
             </tbody>
           </table>
         </div>
-        <div className='flex flex-col justify-center items-center text-xs mt-20'>
-          <div className='w-1/2 text-center'>
+        <div className='flex flex-col justify-center items-center text-[10px] mt-40'>
+          <div className='text-center'>
             <p>WARRANTY AGREEMENT</p>
             <br />
             <p>
