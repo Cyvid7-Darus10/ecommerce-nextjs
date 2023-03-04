@@ -374,16 +374,53 @@ function Layout({ title, smallHeader, children, bgImage }) {
               Contact Us
             </Link>
             {status === "loading" ? (
-              "Loading"
-            ) : session?.user ? (
-              <Link href='/account' className='p-2 custom-hover'>
-                {session.user.userName}
+              <Link href='/login' className='p-2 custom-hover'>
+                Loading...
               </Link>
+            ) : session?.user ? (
+              <Menu>
+                <MenuHandler>
+                  <Button color='white' size='sm'>
+                    {session.user.userName}
+                  </Button>
+                </MenuHandler>
+                <MenuList>
+                  <MenuItem>
+                    <Link href='/profile'>Profile</Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href='/order-history'>Order History</Link>
+                  </MenuItem>
+                  {session.user.isAdmin && (
+                    <MenuItem>
+                      <Link href='admin/dashboard' className='text-red-500'>
+                        Admin Panel
+                      </Link>
+                    </MenuItem>
+                  )}
+                  <MenuItem>
+                    <button onClick={logoutClickHandler}>Logout</button>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             ) : (
               <Link href='/login' className='p-2 custom-hover'>
                 Login
               </Link>
             )}
+            <button
+              className='p-2 custom-hover'
+              onClick={() => {
+                setOpenCart(true);
+              }}
+            >
+              <ShoppingCartIcon />
+              {cart.cartItems.length > 0 && (
+                <span className='ml-1 rounded-full bg-[#f44336] text-white px-2 py-1 text-xs font-bold'>
+                  {cartItemCount}
+                </span>
+              )}
+            </button>
           </div>
         </div>
 
