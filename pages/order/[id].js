@@ -363,91 +363,94 @@ export default function OrderScreen() {
         )}
       </div>
       <div id='receipt' className='hidden'>
-        <div className='flex flex-col items-center justify-center w-full h-full'>
-          <div className='flex flex-col w-full h-full items-center'>
-            <h1 className='text-2xl'>
-              <strong>CABSFOR SECURITY SYSTEMS SERVICES</strong>
-            </h1>
-            <p>A Ricardo Bagac, Bataan</p>
-            <p>
-              <strong>LEMUILLE T. CABANTAV -</strong> Prop.
-            </p>
-            <p>
-              NON VAT Reg. TIN: <strong>481-999-558-000</strong>
-            </p>
+        <div className='block'>
+          <div className='flex flex-col items-center justify-center w-full h-full'>
+            <div className='flex flex-col w-full h-full items-center'>
+              <h1 className='text-2xl'>
+                <strong>CABSFOR SECURITY SYSTEMS SERVICES</strong>
+              </h1>
+              <p>A Ricardo Bagac, Bataan</p>
+              <p>
+                <strong>LEMUILLE T. CABANTAV -</strong> Prop.
+              </p>
+              <p>
+                NON VAT Reg. TIN: <strong>481-999-558-000</strong>
+              </p>
 
-            <hr className='w-full border-2 border-black my-2 border-dashed' />
+              <hr className='w-full border-2 border-black my-2 border-dashed' />
 
-            <div className='italic text-center'> {paidAt} </div>
-            <div className='italic text-center'> Sale ID: {order._id} </div>
+              <div className='italic text-center'> {paidAt} </div>
+              <div className='italic text-center'> Sale ID: {order._id} </div>
+            </div>
           </div>
-        </div>
-        <hr className='w-full border-2 border-black my-2 border-dashed' />
+          <hr className='w-full border-2 border-black my-2 border-dashed' />
 
-        <div className='flex flex-col justify-start items-start'>
-          <div className='text-left w-1/2'>
-            Invoice To: {shippingAddress?.fullName}
+          <div className='flex flex-col justify-start items-start'>
+            <div className='text-left w-1/2'>
+              Invoice To: {shippingAddress?.fullName}
+            </div>
+            <div className='flex items-start'>
+              {shippingAddress?.address}, {shippingAddress?.city},{" "}
+              {shippingAddress?.postalCode}, {shippingAddress?.country}{" "}
+            </div>
+            <div className='flex items-start'>
+              {shippingAddress?.contactNumber}
+            </div>
           </div>
-          <div className='flex items-start'>
-            {shippingAddress?.address}, {shippingAddress?.city},{" "}
-            {shippingAddress?.postalCode}, {shippingAddress?.country}{" "}
-          </div>
-          <div className='flex items-start'>
-            {shippingAddress?.contactNumber}
-          </div>
-        </div>
 
-        <hr className='w-full border-2 border-black my-2 border-dashed' />
+          <hr className='w-full border-2 border-black my-2 border-dashed' />
 
-        <div className='flex justify-center items-center w-screen'>
-          <table className='table w-full'>
-            <tbody>
-              <tr className='border-b-2'>
-                <td className='text-center'>Item Name</td>
-                <td className='text-center'>Price</td>
-                <td className='text-center'>Qty.</td>
-                <td className='text-center'>Total</td>
-              </tr>
-              {orderItems?.map((item, key) => (
-                <tr key={key} className='border-b-2 border-t-2'>
-                  <td className='w-1/2'>{item.name}</td>
-                  <td className='w-1/4 text-center'>
-                    ₱{formatNumber(item.quantity * item.price)}
-                  </td>
-                  <td className='w-1/4 text-center'>{item.quantity}</td>
-                  <td>₱{formatNumber(item.quantity * item.price)}</td>
+          <div className='flex justify-center items-center w-screen'>
+            <table className='table w-full'>
+              <tbody>
+                <tr className='border-b-2'>
+                  <td className='text-center'>Item Name</td>
+                  <td className='text-center'>Price</td>
+                  <td className='text-center'>Qty.</td>
+                  <td className='text-center'>Total</td>
                 </tr>
-              ))}
-              <tr>
-                <td></td>
-                <td></td>
-                <td className='w-3/4 text-center'>Subtotal</td>
-                <td className='w-1/4'>₱{formatNumber(itemsPrice)}</td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td className='w-3/4  text-center'>Shipping</td>
-                <td className='w-1/4  text-center'>
-                  ₱{formatNumber(shippingPrice)}
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td className='w-3/4  text-center'>Tax</td>
-                <td className='w-1/4'>₱{formatNumber(taxPrice)}</td>
-              </tr>
-              <tr>
-                <td>Payment Type</td>
-                <td className='text-center'> {order.paymentMethod} </td>
-                <td className='w-3/4  text-center'>Total</td>
-                <td className='w-1/4'>₱{formatNumber(totalPrice)}</td>
-              </tr>
-            </tbody>
-          </table>
+                {orderItems?.map((item, key) => (
+                  <tr key={key} className='border-b-2 border-t-2'>
+                    <td className='w-1/2'>{item.name}</td>
+                    <td className='w-1/4 text-center'>
+                      ₱{formatNumber(item.quantity * item.price)}
+                    </td>
+                    <td className='w-1/4 text-center'>{item.quantity}</td>
+                    <td>₱{formatNumber(item.quantity * item.price)}</td>
+                  </tr>
+                ))}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td className='w-3/4 text-center'>Subtotal</td>
+                  <td className='w-1/4'>₱{formatNumber(itemsPrice)}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td className='w-3/4  text-center'>Shipping</td>
+                  <td className='w-1/4  text-center'>
+                    ₱{formatNumber(shippingPrice)}
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td className='w-3/4  text-center'>Tax</td>
+                  <td className='w-1/4'>₱{formatNumber(taxPrice)}</td>
+                </tr>
+                <tr>
+                  <td>Payment Type</td>
+                  <td className='text-center'> {order.paymentMethod} </td>
+                  <td className='w-3/4  text-center'>Total</td>
+                  <td className='w-1/4'>₱{formatNumber(totalPrice)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div className='flex flex-col justify-center items-center text-[10px] mt-40'>
+        {/* push to the buttom */}
+        <div className='block text-center text-[10px] absolute bottom-0'>
           <div className='text-center'>
             <p>WARRANTY AGREEMENT</p>
             <br />
