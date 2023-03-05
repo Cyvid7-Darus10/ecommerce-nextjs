@@ -83,6 +83,9 @@ function AdminUsersScreen() {
               <Link href='/admin/products'>Products</Link>
             </li>
             <li>
+              <Link href='/admin/refunds'>Refund/Transfer</Link>
+            </li>
+            <li>
               <Link href='/admin/users' className='font-bold'>
                 Users
               </Link>
