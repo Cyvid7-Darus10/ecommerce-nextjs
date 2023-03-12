@@ -597,11 +597,25 @@ export default function OrderScreen() {
       >
         <DialogHeader>Update Delivery Location</DialogHeader>
         <DialogBody divider>
-          <input
-            type='text'
+          <select
             className='w-full border-2 rounded-sm p-2'
             onChange={(e) => setResolveMessage(e.target.value)}
-          />
+          >
+            <option value=''>Select Reason</option>
+            <option value='Unpaid orders are considered incomplete and will not be processed'>
+              Unpaid orders are considered incomplete and will not be processed
+            </option>
+            <option value='Order placed'>Order placed</option>
+            <option value='Seller is preparing for ship your parcel.'>
+              Seller is preparing for ship your parcel.
+            </option>
+            <option value='Your parcel is out of delivery'>
+              Your parcel is out of delivery
+            </option>
+            <option value='Parcel has been delivered.'>
+              Parcel has been delivered.
+            </option>
+          </select>
         </DialogBody>
         <DialogFooter>
           <Button
