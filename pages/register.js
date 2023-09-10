@@ -44,10 +44,6 @@ export default function LoginScreen() {
             });
 
             router.push("/login");
-
-            if (result.error) {
-                toast.error(result.error);
-            }
         } catch (err) {
             toast.error(getError(err));
         }
