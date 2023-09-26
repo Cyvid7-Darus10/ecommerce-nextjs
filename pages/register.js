@@ -43,7 +43,15 @@ export default function LoginScreen() {
                 password,
             });
 
-            router.push("/login");
+            const result = await signIn("credentials", {
+                redirect: false,
+                email,
+                password,
+            });
+
+            if (result.error) {
+                toast.error(result.error);
+            }
         } catch (err) {
             toast.error(getError(err));
         }
