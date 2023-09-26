@@ -121,13 +121,14 @@ function Layout({ title, smallHeader, children, bgImage }) {
         setCartItemCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
     }, [cart.cartItems]);
 
-    useEffect(() => {
-        if (
-            (title === "Product" || title === "Products") &&
-            cart.cartItems.length > 0
-        )
-            setOpenCart(true);
-    }, [cart, title]);
+    // for pop up cart
+    // useEffect(() => {
+    //     if (
+    //         (title === "Product" || title === "Products") &&
+    //         cart.cartItems.length > 0
+    //     )
+    //         setOpenCart(true);
+    // }, [cart, title]);
 
     return (
         <>
