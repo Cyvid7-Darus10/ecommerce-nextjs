@@ -92,12 +92,15 @@ export default function LoginScreen() {
                             Login
                         </Button>
                     </div>
-                    <div className="mb-4 ">
-                        Don&apos;t have an account? &nbsp;
+                    <div className="mb-4 gap-5 flex">
                         <Link
                             href={`/register?redirect=${redirect || "/"}`}
                             className="text-blue-500">
                             Register
+                        </Link>
+                        |
+                        <Link href="/reset-password" className="text-blue-500">
+                            Forgot Password?
                         </Link>
                     </div>
                 </div>
