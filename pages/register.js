@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import Layout from "../components/Layout";
 import { getError } from "../utils/error";
