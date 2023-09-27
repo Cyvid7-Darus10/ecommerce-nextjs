@@ -55,7 +55,7 @@ async function handler(req, res) {
             console.error(error);
             return res
                 .status(500)
-                .json({ message: "Failed to send the email." });
+                .json({ message: "Failed to send the email.", error });
         }
 
         await db.disconnect();
