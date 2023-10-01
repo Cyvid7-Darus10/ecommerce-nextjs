@@ -322,9 +322,9 @@ export default function OrderScreen() {
                                         </div>
                                     ) : (
                                         <>
-                                            <div className="text-red-500">
+                                            {/* <div className="text-red-500">
                                                 Not delivered
-                                            </div>
+                                            </div> */}
                                             <div className="text-green-500">
                                                 Current Location:{" "}
                                                 {order.currentLocation}
