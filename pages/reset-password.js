@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import { Input, Button } from "@material-tailwind/react";
-import { set } from "mongoose";
 
 export default function ResetPassword() {
     const router = useRouter();
