@@ -50,7 +50,7 @@ export default function ProductScreen({ product }) {
     return (
         <>
             <Layout title="Product" smallHeader={true}>
-                <div className="container px-0 mx-0 ">
+                <div className="container px-0 mx-0 mb-5">
                     <div className="flex items-center py-2 px-5">
                         <Link href="/products">
                             <div className="flex items-center">
@@ -128,12 +128,7 @@ export default function ProductScreen({ product }) {
                             </div>
                         ))}
                     </div>
-                    <CommentForm
-                        onCommentSubmit={(comment) => {
-                            // Handle the submitted comment here
-                            console.log(comment);
-                        }}
-                    />
+                    <CommentForm product={product} />
                 </div>
             </Layout>
         </>

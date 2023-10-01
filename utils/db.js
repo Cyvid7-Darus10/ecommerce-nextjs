@@ -17,11 +17,7 @@ async function connect() {
         await mongoose.disconnect();
     }
 
-    await mongoose.connect(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        poolSize: 10, // Adjust this number as needed
-    });
+    await mongoose.connect(process.env.MONGODB_URI);
 
     mongoose.connection.on("connected", () => {
         console.log("Mongoose connected");
