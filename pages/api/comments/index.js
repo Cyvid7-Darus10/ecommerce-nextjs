@@ -20,10 +20,9 @@ const handler = async (req, res) => {
 const getHandler = async (req, res) => {
     await db.connect();
     const productId = req.query.productId;
-    const comments = await Comment.find({ product: productId }).populate(
-        "user",
-        "name"
-    );
+    const comments = await Comment.find({ product: productId })
+        .populate("user", "firstName lastName userName") // Updated this line
+        .exec();
     await db.disconnect();
     res.send(comments);
 };

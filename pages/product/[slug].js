@@ -7,16 +7,19 @@ import { Store } from "../../utils/Store";
 import { formatNumber } from "../../utils/utils";
 import Layout from "../../components/Layout";
 import CommentForm from "../../components/pages/product/CommentForm";
+import Comments from "../../components/pages/product/Comments";
 import { toast } from "react-toastify";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Product from "../../models/Product";
+import axios from "axios";
 import db from "../../utils/db";
 
 export default function ProductScreen({ product }) {
     const { state, dispatch } = useContext(Store);
     const { query } = useRouter();
     const { slug } = query;
+    const [comments, setComments] = useState([]);
     const [randomProducts, setRandomProducts] = useState([]);
 
     useEffect(() => {
@@ -26,6 +29,22 @@ export default function ProductScreen({ product }) {
         const randomFourProducts = randommizedProducts.slice(0, 4);
         setRandomProducts(randomFourProducts);
     }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data } = await axios.get(
+                    `/api/comments?productId=${product._id}`
+                );
+
+                console.log(data);
+                setComments(data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, [slug]);
 
     if (!product) {
         return <div>Product Not Found</div>;
@@ -129,6 +148,8 @@ export default function ProductScreen({ product }) {
                         ))}
                     </div>
                     <CommentForm product={product} />
+
+                    <Comments comments={comments} />
                 </div>
             </Layout>
         </>
@@ -141,6 +162,7 @@ export async function getServerSideProps(context) {
 
     await db.connect();
     const product = await Product.findOne({ slug }).lean();
+
     await db.disconnect();
     return {
         props: {
