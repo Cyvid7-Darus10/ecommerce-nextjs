@@ -44,7 +44,7 @@ export default function Home({ products }) {
             default:
                 currentProducts = products.sort((a, b) => a._id - b._id);
         }
-        console.log(currentProducts);
+
         const indexOfLastItem = currentPage * itemsPerPage;
         const indexOfFirstItem = indexOfLastItem - itemsPerPage;
         const slicedItems = currentProducts.slice(
