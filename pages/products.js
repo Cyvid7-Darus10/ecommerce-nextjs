@@ -7,18 +7,21 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Store } from "../utils/Store";
 import Product from "../models/Product";
 import db from "../utils/db";
+import ReactStars from "react-stars";
 
 export default function Home({ products }) {
     const [currentItems, setCurrentItems] = useState([]);
     const [filterType, setFilterType] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedBrand, setSelectedBrand] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const { state, dispatch } = useContext(Store);
     const { cart } = state;
     const [categories, setCategories] = useState([]);
-
+    const [brands, setBrands] = useState([]);
     const [loading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedRating, setSelectedRating] = useState(0);
     const [itemsPerPage] = useState(8);
 
     useEffect(() => {
@@ -28,6 +31,18 @@ export default function Home({ products }) {
         if (selectedCategory && selectedCategory !== "all-items") {
             currentProducts = products.filter(
                 (product) => product.category === selectedCategory
+            );
+        }
+
+        if (selectedBrand && selectedBrand !== "all-brands") {
+            currentProducts = products.filter(
+                (product) => product.brand === selectedBrand
+            );
+        }
+
+        if (selectedRating) {
+            currentProducts = products.filter(
+                (product) => parseFloat(product.rating) >= selectedRating
             );
         }
 
@@ -41,16 +56,6 @@ export default function Home({ products }) {
             case "high_to_low":
                 currentProducts = currentProducts.sort(
                     (a, b) => b.price - a.price
-                );
-                break;
-            case "rating_desc":
-                currentProducts = currentProducts.sort(
-                    (a, b) => b.rating - a.rating
-                );
-                break;
-            case "rating_asc":
-                currentProducts = currentProducts.sort(
-                    (a, b) => a.rating - b.rating
                 );
                 break;
             case "search":
@@ -78,13 +83,21 @@ export default function Home({ products }) {
         products,
         searchValue,
         selectedCategory,
+        selectedRating,
+        selectedBrand,
     ]);
 
     // update categories based on products
     useEffect(() => {
-        const categories = products.map((product) => product.category);
+        const categories = products.map((product) =>
+            product.category.toUpperCase()
+        );
         const uniqueCategories = [...new Set(categories)];
         setCategories(uniqueCategories);
+
+        const brands = products.map((product) => product.brand.toUpperCase());
+        const uniqueBrands = [...new Set(brands)];
+        setBrands(uniqueBrands);
     }, [products]);
 
     // Change page
@@ -153,23 +166,24 @@ export default function Home({ products }) {
                                     </option>
                                 </select>
                             </div>
-                            <div className="mb-4">
+                            <div className="mb-4 items-center justify-center flex flex-col">
                                 <h4 className="font-semibold mb-2">
                                     Sort by Rating:
                                 </h4>
-                                <select
-                                    className="w-full py-2 px-4 border rounded-md"
-                                    onChange={(e) =>
-                                        setFilterType(e.target.value)
-                                    }>
-                                    <option value="default">Default</option>
-                                    <option value="rating_desc">
-                                        High to Low
-                                    </option>
-                                    <option value="rating_asc">
-                                        Low to High
-                                    </option>
-                                </select>
+                                <ReactStars
+                                    count={5}
+                                    size={24}
+                                    color2={"#ffd700"}
+                                    onChange={(newRating) =>
+                                        setSelectedRating(newRating)
+                                    }
+                                    value={selectedRating}
+                                />
+                                <button
+                                    onClick={() => setSelectedRating(0)}
+                                    className="text-sm text-red-500">
+                                    Reset
+                                </button>
                             </div>
 
                             <div className="mb-4">
@@ -187,6 +201,27 @@ export default function Home({ products }) {
                                     {categories.map((category, index) => (
                                         <option key={index} value={category}>
                                             {category}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="mb-4">
+                                <h4 className="font-semibold mb-2">Brands:</h4>
+                                <select
+                                    className="w-full py-2 px-4 border rounded-md"
+                                    onChange={(e) => {
+                                        setSelectedBrand(e.target.value);
+                                    }}>
+                                    <option value="all-brands">
+                                        All Brands
+                                    </option>
+                                    {brands.map((brand, index) => (
+                                        <option
+                                            key={index}
+                                            value={brand}
+                                            className="capitalize">
+                                            {brand}
                                         </option>
                                     ))}
                                 </select>
