@@ -9,7 +9,7 @@ export default function ProductCard({ product, addToCartHandler }) {
     return (
         <div className="flex flex-col items-center py-10 px-5 border border-gray-200 rounded-md shadow-md">
             <Link href={`/product/${product.slug}`}>
-                <div className="w-100 h-100 hover:transform hover:scale-110 transition duration-500 ease-in-out">
+                <div className="w-100 h-100 hover:transform hover:scale-110 transition duration-500 ease-in-out min-h-[250px]">
                     <Image
                         src={product.image}
                         alt={product.name}
