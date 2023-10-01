@@ -14,6 +14,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Product from "../../models/Product";
 import axios from "axios";
 import db from "../../utils/db";
+import ReactStars from "react-stars";
 
 export default function ProductScreen({ product }) {
     const { state, dispatch } = useContext(Store);
@@ -44,6 +45,8 @@ export default function ProductScreen({ product }) {
             }
         };
         fetchData();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [slug]);
 
     if (!product) {
@@ -100,6 +103,16 @@ export default function ProductScreen({ product }) {
                                 </h1>
                                 <p className="text-2xl font-semibold py-2">
                                     Price: ₱{formatNumber(product.price)}
+                                </p>
+                                <p className="text-2xl font-semibold py-2 flex items-center gap-2">
+                                    Rating:
+                                    <ReactStars
+                                        count={5}
+                                        size={24}
+                                        color2={"#ffd700"}
+                                        edit={false}
+                                        value={product.rating}
+                                    />
                                 </p>
                                 <p className="text-xl font-semibold py-2">
                                     Description:

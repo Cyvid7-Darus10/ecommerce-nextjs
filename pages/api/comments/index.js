@@ -1,5 +1,6 @@
 import { getSession } from "next-auth/react";
 import Comment from "../../../models/Comment";
+import Product from "../../../models/Product";
 import db from "../../../utils/db";
 
 const handler = async (req, res) => {
@@ -45,6 +46,19 @@ const postHandler = async (req, res, user) => {
     });
 
     const comment = await newComment.save();
+
+    // update the product rating
+    const product = await Product.findById(productId);
+
+    const existingComments = await Comment.find({ product: productId });
+    const numReviews = existingComments.length;
+    const ratings =
+        existingComments.reduce((a, c) => c.rating + a, 0) / numReviews;
+
+    product.rating = ratings;
+    product.numReviews = numReviews;
+    await product.save();
+
     await db.disconnect();
     res.send({ message: "Comment created successfully", comment });
 };
