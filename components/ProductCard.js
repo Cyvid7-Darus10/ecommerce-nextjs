@@ -3,7 +3,7 @@ import Link from "next/link";
 import { formatNumber } from "../utils/utils";
 import Image from "next/image";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import StarRatings from "react-rating-stars-component";
+import ReactStars from "react-stars";
 
 export default function ProductCard({ product, addToCartHandler }) {
     return (
@@ -20,15 +20,14 @@ export default function ProductCard({ product, addToCartHandler }) {
             </Link>
 
             <p className="text-xl font-bold text-left mt-auto">
-                {product.name}
+                {product.name} {product.rating}
             </p>
-            <StarRatings
+            <ReactStars
                 count={5}
-                value={product.rating} // Assuming your product object has a 'rating' property
                 size={24}
-                activeColor="#ffd700"
-                isHalf={true} // Allows for half-star ratings
-                edit={false} // Disables rating selection
+                color2={"#ffd700"}
+                edit={false}
+                value={product.rating}
             />
             <p className="py-5 text-[#f44336] mt-auto">
                 ₱ {formatNumber(product.price)}
