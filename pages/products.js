@@ -96,25 +96,6 @@ export default function Home({ products }) {
                             }}
                         />
                     </div>
-                    <div className="flex px-5 py-2">
-                        <select
-                            className="py-2 px-5 border border-gray-200 rounded-md"
-                            onChange={(e) => setFilterType(e.target.value)}>
-                            <option value="">Sort by</option>
-                            <option value="low_to_high">
-                                Price: Low to High
-                            </option>
-                            <option value="high_to_low">
-                                Price: High to Low
-                            </option>
-                            <option value="rating_desc">
-                                Rating: High to Low
-                            </option>
-                            <option value="rating_asc">
-                                Rating: Low to High
-                            </option>
-                        </select>
-                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pb-12 px-5">
                         {!loading &&
                             products &&
