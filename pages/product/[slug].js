@@ -6,6 +6,7 @@ import data from "../../utils/data";
 import { Store } from "../../utils/Store";
 import { formatNumber } from "../../utils/utils";
 import Layout from "../../components/Layout";
+import CommentForm from "../../components/pages/product/CommentForm";
 import { toast } from "react-toastify";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -127,6 +128,12 @@ export default function ProductScreen({ product }) {
                             </div>
                         ))}
                     </div>
+                    <CommentForm
+                        onCommentSubmit={(comment) => {
+                            // Handle the submitted comment here
+                            console.log(comment);
+                        }}
+                    />
                 </div>
             </Layout>
         </>
