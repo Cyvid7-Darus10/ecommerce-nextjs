@@ -14,6 +14,10 @@ export default function CommentForm({ onCommentSubmit }) {
         setComment("");
     };
 
+    const uploadHandler = (e) => {
+        console.log(e.target.files[0]);
+    };
+
     return (
         <div className="mt-5">
             <form onSubmit={handleSubmit}>
