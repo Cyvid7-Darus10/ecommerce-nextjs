@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import ReactStars from "react-stars";
 
 export default function Comments({ comments = [] }) {
     return (
@@ -10,10 +11,10 @@ export default function Comments({ comments = [] }) {
                 <div key={comment._id} className="mb-6 border-b pb-4">
                     <div className="flex items-center mb-2">
                         <div className="mr-3">
-                            {comment.user && comment.user.image ? (
+                            {comment.firstName && comment.user.image ? (
                                 <Image
-                                    src={comment.user.image}
-                                    alt={comment.user.name}
+                                    src={comment.user.firstName}
+                                    alt={comment.user.firstName}
                                     width={50}
                                     height={50}
                                     className="rounded-full"
@@ -48,11 +49,15 @@ export default function Comments({ comments = [] }) {
                             />
                         </div>
                     )}
-                    <div>
+                    <div className="mb-2 flex items-center gap-2">
                         Rating:{" "}
-                        <span className="text-yellow-500 font-semibold">
-                            {comment.rating} Stars
-                        </span>
+                        <ReactStars
+                            count={5}
+                            size={24}
+                            color2={"#ffd700"}
+                            edit={false} // This makes the stars read-only
+                            value={comment.rating}
+                        />
                     </div>
                 </div>
             ))}

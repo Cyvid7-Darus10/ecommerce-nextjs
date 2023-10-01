@@ -147,9 +147,11 @@ export default function ProductScreen({ product }) {
                             </div>
                         ))}
                     </div>
-                    <CommentForm product={product} />
+                    <div className="px-5 py-5">
+                        <CommentForm product={product} />
 
-                    <Comments comments={comments} />
+                        <Comments comments={comments} />
+                    </div>
                 </div>
             </Layout>
         </>
