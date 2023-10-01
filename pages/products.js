@@ -30,13 +30,13 @@ export default function Home({ products }) {
         // First, filter by category if it's selected
         if (selectedCategory && selectedCategory !== "all-items") {
             currentProducts = products.filter(
-                (product) => product.category === selectedCategory
+                (product) => product.category.toUpperCase() === selectedCategory
             );
         }
 
         if (selectedBrand && selectedBrand !== "all-brands") {
             currentProducts = products.filter(
-                (product) => product.brand === selectedBrand
+                (product) => product.brand.toUpperCase() === selectedBrand
             );
         }
 
