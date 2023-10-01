@@ -507,39 +507,42 @@ export default function OrderScreen() {
                                                 </div>
                                             </div>
                                         </li>
-                                        {!isPaid && (
-                                            <li>
-                                                {isPending ? (
-                                                    <div>Loading...</div>
-                                                ) : (
-                                                    <div className="w-full">
-                                                        <PayPalButtons
-                                                            createOrder={
-                                                                createOrder
-                                                            }
-                                                            onApprove={
-                                                                onApprove
-                                                            }
-                                                            onError={
-                                                                onError
-                                                            }></PayPalButtons>
-                                                    </div>
-                                                )}
-                                                {loadingPay && (
-                                                    <div>Loading...</div>
-                                                )}
-                                            </li>
-                                        )}
-                                        {!isPaid && (
-                                            <li>
-                                                <Button
-                                                    onClick={nextPay}
-                                                    className="w-full">
-                                                    Next Pay (Gcash, Paymaya,
-                                                    etc.)
-                                                </Button>
-                                            </li>
-                                        )}
+                                        {!isPaid &&
+                                            paymentMethod === "PayPal" && (
+                                                <li>
+                                                    {isPending ? (
+                                                        <div>Loading...</div>
+                                                    ) : (
+                                                        <div className="w-full">
+                                                            <PayPalButtons
+                                                                createOrder={
+                                                                    createOrder
+                                                                }
+                                                                onApprove={
+                                                                    onApprove
+                                                                }
+                                                                onError={
+                                                                    onError
+                                                                }></PayPalButtons>
+                                                        </div>
+                                                    )}
+                                                    {loadingPay && (
+                                                        <div>Loading...</div>
+                                                    )}
+                                                </li>
+                                            )}
+                                        {!isPaid &&
+                                            paymentMethod ===
+                                                "Next Pay (Bank, Gcash, PayMaya, etc.)" && (
+                                                <li>
+                                                    <Button
+                                                        onClick={nextPay}
+                                                        className="w-full">
+                                                        Next Pay (Gcash,
+                                                        Paymaya, etc.)
+                                                    </Button>
+                                                </li>
+                                            )}
                                         {session.user.isAdmin &&
                                             order.isPaid &&
                                             !order.isDelivered && (
