@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import ReactStars from "react-stars";
 
 export default function CommentForm({ onCommentSubmit }) {
     const [comment, setComment] = useState("");
+    const [rating, setRating] = useState(0); // New state for rating
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -10,8 +12,13 @@ export default function CommentForm({ onCommentSubmit }) {
             toast.error("Please add a comment.");
             return;
         }
-        onCommentSubmit(comment);
+        if (rating === 0) {
+            toast.error("Please select a rating.");
+            return;
+        }
+        onCommentSubmit({ comment, rating }); // Pass both comment and rating
         setComment("");
+        setRating(0);
     };
 
     const uploadHandler = (e) => {
@@ -34,6 +41,18 @@ export default function CommentForm({ onCommentSubmit }) {
                         className="mt-1 p-2 w-full border rounded-md"
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}></textarea>
+                </div>
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                        Rating
+                    </label>
+                    <ReactStars
+                        count={5}
+                        size={24}
+                        color2={"#ffd700"}
+                        onChange={(newRating) => setRating(newRating)}
+                        value={rating}
+                    />
                 </div>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
