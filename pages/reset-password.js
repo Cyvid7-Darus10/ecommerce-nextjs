@@ -45,6 +45,8 @@ export default function ResetPassword() {
                     ? "Password has been reset."
                     : "Password reset link sent to email."
             );
+
+            router.push("/login");
         } catch (err) {
             toast.error(err.message || "Failed to process request.");
         }
