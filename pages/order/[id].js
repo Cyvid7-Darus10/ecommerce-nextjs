@@ -318,7 +318,10 @@ export default function OrderScreen() {
                                     </div>
                                     {isDelivered ? (
                                         <div className="text-green-500">
-                                            Delivered at {deliveredAt}
+                                            Delivered at{" "}
+                                            {new Date(
+                                                deliveredAt
+                                            ).toLocaleDateString()}
                                         </div>
                                     ) : (
                                         <>
