@@ -169,7 +169,7 @@ export default function ProductScreen({ product }) {
                         ))}
                     </div>
                     <div className="px-5 py-5">
-                        {session.user && <CommentForm product={product} />}
+                        {session?.user && <CommentForm product={product} />}
 
                         <Comments comments={comments} />
                     </div>
