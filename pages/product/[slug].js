@@ -117,7 +117,14 @@ export default function ProductScreen({ product }) {
                                     Description:
                                 </p>
                                 <p className="text-lg py-2">
-                                    {product.description}
+                                    {product.description
+                                        .split(",")
+                                        .map((item, index) => (
+                                            <span key={index}>
+                                                {item}
+                                                <br />
+                                            </span>
+                                        ))}
                                 </p>
                             </div>
 
