@@ -121,7 +121,7 @@ export default function ProductScreen({ product }) {
                                         .split(",")
                                         .map((item, index) => (
                                             <span key={index}>
-                                                {item}
+                                                • {item}
                                                 <br />
                                             </span>
                                         ))}
