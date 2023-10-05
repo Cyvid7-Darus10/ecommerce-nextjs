@@ -15,6 +15,7 @@ import Product from "../../models/Product";
 import axios from "axios";
 import db from "../../utils/db";
 import ReactStars from "react-stars";
+import { useSession } from "next-auth/react";
 
 export default function ProductScreen({ product }) {
     const { state, dispatch } = useContext(Store);
@@ -22,6 +23,7 @@ export default function ProductScreen({ product }) {
     const { slug } = query;
     const [comments, setComments] = useState([]);
     const [randomProducts, setRandomProducts] = useState([]);
+    const { data: session } = useSession();
 
     useEffect(() => {
         const randommizedProducts = data.products.sort(
@@ -167,7 +169,7 @@ export default function ProductScreen({ product }) {
                         ))}
                     </div>
                     <div className="px-5 py-5">
-                        <CommentForm product={product} />
+                        {session.user && <CommentForm product={product} />}
 
                         <Comments comments={comments} />
                     </div>
