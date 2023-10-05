@@ -4,12 +4,9 @@ import Head from "next/head";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-
 import { TransitionScroll } from "react-transition-scroll";
 import "react-transition-scroll/dist/index.css";
 import useWindowDimensions from "../utils/useWindowDimensions";
-
-// Icons
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import MailIcon from "@mui/icons-material/Mail";
