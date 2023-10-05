@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -8,8 +8,11 @@ import { getError } from "../../utils/error";
 import { Input, Button } from "@material-tailwind/react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminLogin() {
+    const [isLoading, setIsLoading] = useState(false);
     const { status, data: session } = useSession();
     const router = useRouter();
     const { redirect } = router.query;
@@ -35,6 +38,7 @@ export default function AdminLogin() {
 
     const submitHandler = async ({ email, password }) => {
         try {
+            setIsLoading(true);
             const result = await signIn("credentials", {
                 redirect: false,
                 email,
@@ -49,10 +53,12 @@ export default function AdminLogin() {
         } catch (err) {
             toast.error(getError(err));
         }
+        setIsLoading(false);
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <ToastContainer position="bottom-center" />
             <form
                 className="bg-white p-10 shadow-lg rounded-md"
                 onSubmit={handleSubmit(submitHandler)}>
@@ -106,8 +112,12 @@ export default function AdminLogin() {
                     </div>
 
                     <div>
-                        <Button color="red" type="submit" className="w-full">
-                            Login
+                        <Button
+                            color="red"
+                            type="submit"
+                            className="w-full"
+                            disabled={isLoading}>
+                            {isLoading ? "Loading..." : "Login"}
                         </Button>
                     </div>
 
