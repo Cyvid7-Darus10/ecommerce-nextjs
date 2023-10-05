@@ -14,6 +14,7 @@ export default NextAuth({
             if (user?.email) token.email = user.email;
             if (user?._id) token._id = user._id;
             if (user?.isAdmin) token.isAdmin = user.isAdmin;
+
             return token;
         },
         async session({ session, token }) {
@@ -28,6 +29,7 @@ export default NextAuth({
             session.user._id = user._id;
             session.user.isAdmin = user.isAdmin;
             session.user.provider = user.provider;
+
             return session;
         },
         async signIn(user) {

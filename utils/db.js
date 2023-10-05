@@ -36,13 +36,13 @@ async function connect() {
 }
 
 async function disconnect() {
-    if (connection.isConnected) {
-        await mongoose.disconnect();
-        console.log("Mongoose disconnected");
-        connection.isConnected = false;
-    } else {
-        console.log("not connected");
-    }
+    // if (connection.isConnected) {
+    //     await mongoose.disconnect();
+    //     console.log("Mongoose disconnected");
+    //     connection.isConnected = false;
+    // } else {
+    //     console.log("not connected");
+    // }
 }
 
 function convertDocToObj(doc) {
