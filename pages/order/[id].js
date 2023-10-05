@@ -571,22 +571,23 @@ export default function OrderScreen() {
                                                 </Button>
                                             </li>
                                         )}
-                                        {!order.isDelivered && (
-                                            <li>
-                                                {loadingDeliver && (
-                                                    <div>Loading...</div>
-                                                )}
-                                                <Button
-                                                    className="primary-green w-full mt-10"
-                                                    onClick={() =>
-                                                        setOpenDeliveryView(
-                                                            true
-                                                        )
-                                                    }>
-                                                    Update Delivery Status
-                                                </Button>
-                                            </li>
-                                        )}
+                                        {!order.isDelivered &&
+                                            session.user.isAdmin && (
+                                                <li>
+                                                    {loadingDeliver && (
+                                                        <div>Loading...</div>
+                                                    )}
+                                                    <Button
+                                                        className="primary-green w-full mt-10"
+                                                        onClick={() =>
+                                                            setOpenDeliveryView(
+                                                                true
+                                                            )
+                                                        }>
+                                                        Update Delivery Status
+                                                    </Button>
+                                                </li>
+                                            )}
                                     </ul>
                                 </CardBody>
                             </Card>
