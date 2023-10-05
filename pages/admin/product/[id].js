@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useReducer } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Layout from "../../../components/Layout";
+import AdminLayout from "../../../components/AdminLayout";
 import { getError } from "../../../utils/error";
 import { Input, Button, Textarea } from "@material-tailwind/react";
 
@@ -147,26 +147,8 @@ export default function AdminProductEditScreen() {
     };
 
     return (
-        <Layout title={`Edit Product ${productId}`} smallHeader={true}>
-            <div className="grid md:grid-cols-4 md:gap-5 w-screen mx-5">
-                <div>
-                    <ul>
-                        <li>
-                            <Link href="/admin/dashboard">Dashboard</Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/orders">Orders</Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/products" className="font-bold">
-                                Products
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/users">Users</Link>
-                        </li>
-                    </ul>
-                </div>
+        <AdminLayout title={`Edit Product ${productId}`} smallHeader={true}>
+            <div className="p-4">
                 <div className="md:col-span-3">
                     {loading ? (
                         <div>Loading...</div>
@@ -329,7 +311,7 @@ export default function AdminProductEditScreen() {
                     )}
                 </div>
             </div>
-        </Layout>
+        </AdminLayout>
     );
 }
 

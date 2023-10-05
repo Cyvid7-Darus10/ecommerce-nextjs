@@ -18,7 +18,6 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
 import {
     Menu,
     MenuHandler,
@@ -26,15 +25,9 @@ import {
     MenuItem,
     Button,
 } from "@material-tailwind/react";
-
-// Utilities
 import { Store } from "../utils/Store";
 import { formatNumber } from "../utils/utils";
-
-// Components
 import Modal from "../components/Modal";
-
-// Styles
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -294,15 +287,6 @@ function Layout({ title, smallHeader, children, bgImage }) {
                                                         Order History
                                                     </Link>
                                                 </MenuItem>
-                                                {session.user.isAdmin && (
-                                                    <MenuItem>
-                                                        <Link
-                                                            href="admin/dashboard"
-                                                            className="text-red-500">
-                                                            Admin Panel
-                                                        </Link>
-                                                    </MenuItem>
-                                                )}
                                                 <MenuItem>
                                                     <button
                                                         onClick={
@@ -428,15 +412,6 @@ function Layout({ title, smallHeader, children, bgImage }) {
                                             Order History
                                         </Link>
                                     </MenuItem>
-                                    {session.user.isAdmin && (
-                                        <MenuItem>
-                                            <Link
-                                                href="admin/dashboard"
-                                                className="text-red-500">
-                                                Admin Panel
-                                            </Link>
-                                        </MenuItem>
-                                    )}
                                     <MenuItem>
                                         <button onClick={logoutClickHandler}>
                                             Logout

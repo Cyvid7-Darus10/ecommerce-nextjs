@@ -3,160 +3,162 @@ import Link from "next/link";
 import { Bar } from "react-chartjs-2";
 
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
 } from "chart.js";
 import React, { useEffect, useReducer } from "react";
-import Layout from "../../components/Layout";
+import AdminLayout from "../../components/AdminLayout";
 import { getError } from "../../utils/error";
 import { formatNumber } from "../../utils/utils";
 
 import { Card } from "@material-tailwind/react";
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
 );
 
 export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top",
+    responsive: true,
+    plugins: {
+        legend: {
+            position: "top",
+        },
     },
-  },
 };
 
 function reducer(state, action) {
-  switch (action.type) {
-    case "FETCH_REQUEST":
-      return { ...state, loading: true, error: "" };
-    case "FETCH_SUCCESS":
-      return { ...state, loading: false, summary: action.payload, error: "" };
-    case "FETCH_FAIL":
-      return { ...state, loading: false, error: action.payload };
-    default:
-      state;
-  }
+    switch (action.type) {
+        case "FETCH_REQUEST":
+            return { ...state, loading: true, error: "" };
+        case "FETCH_SUCCESS":
+            return {
+                ...state,
+                loading: false,
+                summary: action.payload,
+                error: "",
+            };
+        case "FETCH_FAIL":
+            return { ...state, loading: false, error: action.payload };
+        default:
+            state;
+    }
 }
 
 function AdminDashboardScreen() {
-  const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
-    loading: true,
-    summary: { salesData: [] },
-    error: "",
-  });
+    const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
+        loading: true,
+        summary: { salesData: [] },
+        error: "",
+    });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/summary`);
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-      }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                dispatch({ type: "FETCH_REQUEST" });
+                const { data } = await axios.get(`/api/admin/summary`);
+                dispatch({ type: "FETCH_SUCCESS", payload: data });
+            } catch (err) {
+                dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const data = {
+        labels: summary.salesData.map((x) => x._id), // 2022/01 2022/03
+        datasets: [
+            {
+                label: "Sales",
+                backgroundColor: "rgba(162, 222, 208, 1)",
+                data: summary.salesData.map((x) => x.totalSales),
+            },
+        ],
     };
+    return (
+        <AdminLayout title="Admin Dashboard">
+            <div className="p-4">
+                <h1 className="text-2xl mb-4 font-semibold">Admin Dashboard</h1>
 
-    fetchData();
-  }, []);
+                {loading ? (
+                    <div>Loading...</div>
+                ) : error ? (
+                    <div className="alert-error">{error}</div>
+                ) : (
+                    <div>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <Card className="p-4 flex flex-col justify-between items-center shadow-lg">
+                                <p className="text-4xl mb-2">
+                                    ₱{formatNumber(summary.ordersPrice)}
+                                </p>
+                                <p className="font-semibold mb-4">Sales</p>
+                                <Link
+                                    href="/admin/orders"
+                                    className="text-blue-500 underline">
+                                    View sales
+                                </Link>
+                            </Card>
 
-  const data = {
-    labels: summary.salesData.map((x) => x._id), // 2022/01 2022/03
-    datasets: [
-      {
-        label: "Sales",
-        backgroundColor: "rgba(162, 222, 208, 1)",
-        data: summary.salesData.map((x) => x.totalSales),
-      },
-    ],
-  };
-  return (
-    <Layout title='Admin Dashboard' smallHeader={true}>
-      <div className='grid md:grid-cols-4 md:gap-5 w-screen mx-5'>
-        <div>
-          <ul>
-            <li>
-              <Link href='/admin/dashboard' className='font-bold'>
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link href='/admin/orders'>Orders</Link>
-            </li>
-            <li>
-              <Link href='/admin/products'>Products</Link>
-            </li>
-            <li>
-              <Link href='/admin/refunds'>Refund/Transfer</Link>
-            </li>
-            <li>
-              <Link href='/admin/users'>Users</Link>
-            </li>
-          </ul>
-        </div>
-        <div className='md:col-span-3'>
-          <h1 className='text-xl'>Admin Dashboard</h1>
-          {loading ? (
-            <div>Loading...</div>
-          ) : error ? (
-            <div className='alert-error'>{error}</div>
-          ) : (
-            <div>
-              <div className='grid grid-cols-1 md:grid-cols-4'>
-                <Card className='p-4 m-1 lg:m-4'>
-                  <p className='text-3xl'>
-                    ₱{formatNumber(summary.ordersPrice)}{" "}
-                  </p>
-                  <p>Sales</p>
-                  <Link href='/admin/orders' className='text-blue-500'>
-                    View sales
-                  </Link>
-                </Card>
-                <Card className='p-4 m-1 lg:m-4'>
-                  <p className='text-3xl'>{summary.ordersCount} </p>
-                  <p>Orders</p>
-                  <Link href='/admin/orders' className='text-blue-500'>
-                    View orders
-                  </Link>
-                </Card>
-                <Card className='p-4 m-1 lg:m-4'>
-                  <p className='text-3xl'>{summary.productsCount} </p>
-                  <p>Products</p>
-                  <Link href='/admin/products' className='text-blue-500'>
-                    View products
-                  </Link>
-                </Card>
-                <Card className='p-4 m-1 lg:m-4'>
-                  <p className='text-3xl'>{summary.usersCount} </p>
-                  <p>Users</p>
-                  <Link href='/admin/users' className='text-blue-500'>
-                    View users
-                  </Link>
-                </Card>
-              </div>
-              <h2 className='text-xl'>Sales Report</h2>
-              <Bar
-                options={{
-                  legend: { display: true, position: "right" },
-                }}
-                data={data}
-              />
+                            <Card className="p-4 flex flex-col justify-between items-center shadow-lg">
+                                <p className="text-4xl mb-2">
+                                    {summary.ordersCount}
+                                </p>
+                                <p className="font-semibold mb-4">Orders</p>
+                                <Link
+                                    href="/admin/orders"
+                                    className="text-blue-500 underline">
+                                    View orders
+                                </Link>
+                            </Card>
+
+                            <Card className="p-4 flex flex-col justify-between items-center shadow-lg">
+                                <p className="text-4xl mb-2">
+                                    {summary.productsCount}
+                                </p>
+                                <p className="font-semibold mb-4">Products</p>
+                                <Link
+                                    href="/admin/products"
+                                    className="text-blue-500 underline">
+                                    View products
+                                </Link>
+                            </Card>
+
+                            <Card className="p-4 flex flex-col justify-between items-center shadow-lg">
+                                <p className="text-4xl mb-2">
+                                    {summary.usersCount}
+                                </p>
+                                <p className="font-semibold mb-4">Users</p>
+                                <Link
+                                    href="/admin/users"
+                                    className="text-blue-500 underline">
+                                    View users
+                                </Link>
+                            </Card>
+                        </div>
+
+                        <div className="mt-8">
+                            <h2 className="text-xl mb-4 font-semibold">
+                                Sales Report
+                            </h2>
+                            <div className="shadow-lg p-4 bg-white">
+                                <Bar options={options} data={data} />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-          )}
-        </div>
-      </div>
-    </Layout>
-  );
+        </AdminLayout>
+    );
 }
 
 AdminDashboardScreen.auth = { adminOnly: true };

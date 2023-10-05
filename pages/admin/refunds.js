@@ -1,7 +1,7 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useReducer } from "react";
-import Layout from "../../components/Layout";
+import AdminLayout from "../../components/AdminLayout";
 import { getError } from "../../utils/error";
 import { formatNumber } from "../../utils/utils";
 
@@ -45,110 +45,79 @@ export default function AdminOrderScreen() {
     }, []);
 
     return (
-        <Layout title="Admin Dashboard" smallHeader={true}>
-            <div className="grid md:grid-cols-4 md:gap-5 w-screen mx-5">
-                <div>
-                    <ul>
-                        <li>
-                            <Link href="/admin/dashboard">Dashboard</Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/orders">Orders</Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/products">Products</Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/refunds" className="font-bold">
-                                Refund/Transfer
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/admin/users">Users</Link>
-                        </li>
-                    </ul>
-                </div>
-                <div className="overflow-x-auto md:col-span-3">
-                    <h1 className="mb-4 text-xl">Admin Refund Requests</h1>
+        <AdminLayout title="Admin Dashboard">
+            <div className="overflow-x-auto md:col-span-3">
+                <h1 className="text-2xl mb-4 font-semibold">
+                    Admin Refund Requests
+                </h1>
 
-                    {loading ? (
-                        <div>Loading...</div>
-                    ) : error ? (
-                        <div className="alert-error">{error}</div>
-                    ) : (
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full">
-                                <thead className="border-b">
-                                    <tr>
-                                        <th className="px-5 text-left">ID</th>
-                                        <th className="p-5 text-left">USER</th>
-                                        <th className="p-5 text-left">DATE</th>
-                                        <th className="p-5 text-left">TOTAL</th>
-                                        <th className="p-5 text-left">PAID</th>
-                                        <th className="p-5 text-left">
-                                            DELIVERED
-                                        </th>
-                                        <th className="p-5 text-left">
-                                            ACTION
-                                        </th>
+                {loading ? (
+                    <div>Loading...</div>
+                ) : error ? (
+                    <div className="alert-error">{error}</div>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full">
+                            <thead className="border-b">
+                                <tr>
+                                    <th className="px-5 text-left">ID</th>
+                                    <th className="p-5 text-left">USER</th>
+                                    <th className="p-5 text-left">DATE</th>
+                                    <th className="p-5 text-left">TOTAL</th>
+                                    <th className="p-5 text-left">PAID</th>
+                                    <th className="p-5 text-left">DELIVERED</th>
+                                    <th className="p-5 text-left">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders.map((order) => (
+                                    <tr key={order._id} className="border-b">
+                                        <td className="p-5">
+                                            {order._id.substring(20, 24)}
+                                        </td>
+                                        <td className="p-5">
+                                            {order.user
+                                                ? `${order.user.firstName} ${order.user.lastName}`
+                                                : "DELETED USER"}
+                                        </td>
+                                        <td className="p-5">
+                                            {order.createdAt.substring(0, 10)}
+                                        </td>
+                                        <td className="p-5">
+                                            ₱{formatNumber(order.totalPrice)}
+                                        </td>
+                                        <td className="p-5">
+                                            {order.isPaid
+                                                ? `${order.paidAt.substring(
+                                                      0,
+                                                      10
+                                                  )}`
+                                                : "not paid"}
+                                        </td>
+                                        <td className="p-5">
+                                            {order.isDelivered
+                                                ? `${order.deliveredAt.substring(
+                                                      0,
+                                                      10
+                                                  )}`
+                                                : "not delivered"}
+                                        </td>
+                                        <td className="p-5">
+                                            <Link
+                                                href={`/order/${order._id}`}
+                                                passHref
+                                                className="text-blue-500">
+                                                Details
+                                            </Link>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {orders.map((order) => (
-                                        <tr
-                                            key={order._id}
-                                            className="border-b">
-                                            <td className="p-5">
-                                                {order._id.substring(20, 24)}
-                                            </td>
-                                            <td className="p-5">
-                                                {order.user
-                                                    ? `${order.user.firstName} ${order.user.lastName}`
-                                                    : "DELETED USER"}
-                                            </td>
-                                            <td className="p-5">
-                                                {order.createdAt.substring(
-                                                    0,
-                                                    10
-                                                )}
-                                            </td>
-                                            <td className="p-5">
-                                                ₱
-                                                {formatNumber(order.totalPrice)}
-                                            </td>
-                                            <td className="p-5">
-                                                {order.isPaid
-                                                    ? `${order.paidAt.substring(
-                                                          0,
-                                                          10
-                                                      )}`
-                                                    : "not paid"}
-                                            </td>
-                                            <td className="p-5">
-                                                {order.isDelivered
-                                                    ? `${order.deliveredAt.substring(
-                                                          0,
-                                                          10
-                                                      )}`
-                                                    : "not delivered"}
-                                            </td>
-                                            <td className="p-5">
-                                                <Link
-                                                    href={`/order/${order._id}`}
-                                                    passHref
-                                                    className="text-blue-500">
-                                                    Details
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
-        </Layout>
+        </AdminLayout>
     );
 }
 
