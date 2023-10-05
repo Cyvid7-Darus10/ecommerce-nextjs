@@ -9,7 +9,6 @@ import dynamic from "next/dynamic";
 import { signOut } from "next-auth/react";
 import { Button } from "@material-tailwind/react";
 import Image from "next/image";
-// import the icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import Inventory2Icon from "@mui/icons-material/Inventory2";

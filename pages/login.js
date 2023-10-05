@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import Layout from "../components/Layout";
@@ -10,6 +10,7 @@ import { Input, Button } from "@material-tailwind/react";
 
 export default function LoginScreen() {
     const { status, data: session } = useSession();
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const { redirect } = router.query;
 
@@ -26,6 +27,7 @@ export default function LoginScreen() {
     } = useForm();
 
     const submitHandler = async ({ email, password }) => {
+        setIsLoading(true); // Set loading state to true at the start
         try {
             const result = await signIn("credentials", {
                 redirect: false,
@@ -39,6 +41,8 @@ export default function LoginScreen() {
             }
         } catch (err) {
             toast.error(getError(err));
+        } finally {
+            setIsLoading(false); // Reset loading state to false once done
         }
     };
 
@@ -88,8 +92,12 @@ export default function LoginScreen() {
                         )}
                     </div>
                     <div className="mb-4 ">
-                        <Button color="red" type="submit" className="w-full">
-                            Login
+                        <Button
+                            color="red"
+                            type="submit"
+                            className="w-full"
+                            disabled={isLoading}>
+                            {isLoading ? "Loading..." : "Login"}
                         </Button>
                     </div>
                     <div className="mb-4 gap-5 flex">
