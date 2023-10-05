@@ -343,7 +343,10 @@ export default function OrderScreen() {
                                     <div>{paymentMethod}</div>
                                     {isPaid ? (
                                         <div className="text-green-500">
-                                            Paid at {paidAt}
+                                            Paid at{" "}
+                                            {new Date(
+                                                paidAt
+                                            ).toLocaleDateString()}
                                         </div>
                                     ) : (
                                         <div className="text-red-500">
