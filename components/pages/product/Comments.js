@@ -20,10 +20,13 @@ export default function Comments({ comments = [] }) {
                                     className="rounded-full"
                                 />
                             ) : (
-                                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                    <span className="text-lg font-semibold">
-                                        {comment.user.userName[0]}
-                                    </span>
+                                <div className="flex items-center justify-center">
+                                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <span className="text-lg font-semibold">
+                                            {comment.user.userName[0]}
+                                        </span>
+                                    </div>{" "}
+                                    {comment.user.userName}
                                 </div>
                             )}
                         </div>
