@@ -8,7 +8,7 @@ async function connect() {
         return;
     }
 
-    if (mongoose.connections.length > 0) {
+    if (mongoose?.connections?.length > 0) {
         connection.isConnected = mongoose.connections[0].readyState;
         if (connection.isConnected === 1) {
             console.log("use previous connection");
@@ -46,7 +46,6 @@ async function disconnect() {
 }
 
 function convertDocToObj(doc) {
-    console.log(doc);
     doc._id = doc._id.toString();
     doc.createdAt = doc.createdAt.toString();
     doc.updatedAt = doc.updatedAt.toString();

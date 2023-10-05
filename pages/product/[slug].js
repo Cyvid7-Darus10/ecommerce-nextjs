@@ -38,7 +38,6 @@ export default function ProductScreen({ product }) {
                     `/api/comments?productId=${product._id}`
                 );
 
-                console.log(data);
                 setComments(data);
             } catch (error) {
                 console.log(error);

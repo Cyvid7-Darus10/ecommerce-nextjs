@@ -277,24 +277,19 @@ function Layout({ title, smallHeader, children, bgImage }) {
                                                 </Button>
                                             </MenuHandler>
                                             <MenuList>
-                                                <MenuItem>
-                                                    <Link href="/profile">
-                                                        Profile
-                                                    </Link>
-                                                </MenuItem>
-                                                <MenuItem>
-                                                    <Link href="/order-history">
+                                                <Link href="/profile">
+                                                    <MenuItem>Profile</MenuItem>
+                                                </Link>
+                                                <Link href="/order-history">
+                                                    <MenuItem>
                                                         Order History
-                                                    </Link>
-                                                </MenuItem>
-                                                <MenuItem>
-                                                    <button
-                                                        onClick={
-                                                            logoutClickHandler
-                                                        }>
-                                                        Logout
-                                                    </button>
-                                                </MenuItem>
+                                                    </MenuItem>
+                                                </Link>
+                                                <button
+                                                    onClick={logoutClickHandler}
+                                                    className="w-full text-left">
+                                                    <MenuItem>Logout</MenuItem>
+                                                </button>
                                             </MenuList>
                                         </Menu>
                                     ) : (

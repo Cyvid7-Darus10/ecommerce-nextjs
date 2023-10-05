@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
         isAdmin: { type: Boolean, required: true, default: false },
         resetPasswordToken: { type: String },
         resetPasswordTokenExpiry: { type: Date },
+        provider: { type: String, required: true, default: "local" },
     },
     {
         timestamps: true,

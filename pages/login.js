@@ -91,13 +91,19 @@ export default function LoginScreen() {
                             </div>
                         )}
                     </div>
-                    <div className="mb-4 ">
+                    <div className="mb-4 flex flex-col gap-4">
                         <Button
                             color="red"
                             type="submit"
                             className="w-full"
                             disabled={isLoading}>
                             {isLoading ? "Loading..." : "Login"}
+                        </Button>
+                        <Button
+                            color="blue"
+                            onClick={() => signIn("google")}
+                            className="w-full items-center justify-center">
+                            Login with Google
                         </Button>
                     </div>
                     <div className="mb-4 gap-5 flex">
