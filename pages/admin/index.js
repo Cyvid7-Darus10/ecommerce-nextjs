@@ -112,7 +112,9 @@ export default function AdminLogin() {
                     </div>
 
                     <div className="mt-4 flex items-center justify-center">
-                        <Link href="/forgot-password">Forgot Password?</Link>
+                        <Link href="/reset-password" className="text-blue-500">
+                            Forgot Password?
+                        </Link>
                     </div>
                 </div>
             </form>
